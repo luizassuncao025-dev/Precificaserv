@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 import { AuthGuard } from "@/components/auth-guard";
 import { upsertUserProfile } from "@/lib/data";
@@ -13,7 +13,6 @@ function isMissingProfileTableError(message: string) {
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [mode, setMode] = useState<"login" | "register">("login");
 
@@ -28,10 +27,12 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (searchParams.get("mode") === "register") {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("mode") === "register") {
       setMode("register");
     }
-  }, [searchParams]);
+  }, []);
 
   const onForgotPassword = async () => {
     if (!email) {
