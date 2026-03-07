@@ -10,7 +10,7 @@ export default function OnboardingPage() {
         <div className="container" style={{ maxWidth: 700 }}>
           <UserProfileForm
             title="Complete seu cadastro para iniciar"
-            description="Esses dados permitem personalizar sua experiência e montar uma saudação com o nome da sua clínica." 
+            description="Esses dados permitem personalizar sua experiÃªncia e montar uma saudaÃ§Ã£o com o nome da sua clÃ­nica." 
             submitLabel="Concluir primeiro acesso"
             onSuccessPath="/dashboard"
           />
