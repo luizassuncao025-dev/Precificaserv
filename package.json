@@ -14,7 +14,7 @@
     "clsx": "^2.1.1",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.542.0",
-    "next": "15.5.2",
+    "next": "^15.5.3",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "zod": "^4.1.5"
@@ -24,7 +24,7 @@
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.7",
     "eslint": "^9.34.0",
-    "eslint-config-next": "15.5.2",
+    "eslint-config-next": "^15.5.3",
     "typescript": "^5.9.2"
   }
 }
