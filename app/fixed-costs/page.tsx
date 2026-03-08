@@ -71,7 +71,11 @@ export default function FixedCostsPage() {
             <div className="badge">Base da precificação</div>
             <h1 className="heading-lg">Custos Fixos Gerais</h1>
             <p className="muted">Custo fixo é todo gasto que não muda conforme o volume de produção ou vendas da empresa.</p>
-            <p className="muted">Defina aqui para que todas as novas precificações usem a mesma base de cálculo automaticamente.</p>
+            <p className="muted">Informe apenas os custos reais da sua operação para que todas as novas precificações usem a mesma base de cálculo automaticamente.</p>
+            <p className="muted" style={{ marginTop: 8 }}>
+              Exemplos: pró-labore, aluguel, condomínio, energia elétrica, água, internet, telefone, contabilidade,
+              manutenção de equipamentos, recepção, esterilização, marketing e software.
+            </p>
           </div>
 
           {message ? <div className="glass card">{message}</div> : null}
@@ -79,16 +83,27 @@ export default function FixedCostsPage() {
           <section className="glass card">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <h2 className="heading-lg">Lista de custos fixos</h2>
-              <button type="button" className="btn btn-secondary" onClick={() => setFixedCosts((rows) => [...rows, { label: "Novo custo", monthly_value: 0 }])}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setFixedCosts((rows) => [...rows, { label: "", monthly_value: 0 }])}
+              >
                 <Plus size={16} /> Adicionar custo
               </button>
             </div>
 
             <div className="grid" style={{ marginTop: 16 }}>
+              {fixedCosts.length === 0 ? (
+                <div className="empty-state">
+                  Nenhum custo fixo informado ainda. Clique em <strong>Adicionar custo</strong> para começar.
+                </div>
+              ) : null}
+
               {fixedCosts.map((cost, index) => (
                 <div key={cost.id ?? `cost-${index}`} className="grid grid-2">
                   <input
                     className="input"
+                    placeholder="Ex.: Aluguel"
                     value={cost.label}
                     onChange={(e) =>
                       setFixedCosts((rows) => rows.map((row, idx) => (idx === index ? { ...row, label: e.target.value } : row)))
@@ -101,7 +116,9 @@ export default function FixedCostsPage() {
                       inputMode="decimal"
                       value={formatBrlInput(cost.monthly_value)}
                       onChange={(e) =>
-                        setFixedCosts((rows) => rows.map((row, idx) => (idx === index ? { ...row, monthly_value: parseBrlInput(e.target.value) } : row)))
+                        setFixedCosts((rows) =>
+                          rows.map((row, idx) => (idx === index ? { ...row, monthly_value: parseBrlInput(e.target.value) } : row)),
+                        )
                       }
                     />
                     <button type="button" className="btn btn-danger" onClick={() => setFixedCosts((rows) => rows.filter((_, idx) => idx !== index))}>

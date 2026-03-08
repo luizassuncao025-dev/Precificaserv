@@ -6,6 +6,12 @@ import { currency, percent } from "@/lib/calculator";
 import { getCurrentUserId, getUserProfile } from "@/lib/data";
 import { PricingResult, ProcedureFormData } from "@/lib/types";
 
+type PiePart = {
+  label: string;
+  value: number;
+  color: [number, number, number];
+};
+
 function drawHeader(doc: jsPDF) {
   doc.setFillColor(11, 50, 44);
   doc.rect(0, 0, 210, 26, "F");
@@ -58,7 +64,7 @@ function drawSimpleTable(doc: jsPDF, startY: number, headers: string[], rows: st
 
     doc.rect(x, y, pageWidth, rowH);
     row.forEach((cell, index) => {
-      doc.text((cell || "-").slice(0, 32), x + index * colW + 2, y + 4.8);
+      doc.text((cell || "-").slice(0, 40), x + index * colW + 2, y + 4.8);
     });
     y += rowH;
   });
@@ -66,43 +72,68 @@ function drawSimpleTable(doc: jsPDF, startY: number, headers: string[], rows: st
   return y + 6;
 }
 
-function drawInsumosChart(doc: jsPDF, data: ProcedureFormData, startY: number) {
-  const totals = data.items
-    .map((item) => ({ name: item.name || "Insumo", value: item.quantity * item.unit_cost }))
-    .filter((item) => item.value > 0)
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 5);
+function drawPieSlice(doc: jsPDF, cx: number, cy: number, radius: number, startAngle: number, endAngle: number, color: [number, number, number]) {
+  const step = Math.max(2, Math.ceil((endAngle - startAngle) / 16));
+  doc.setFillColor(color[0], color[1], color[2]);
 
-  doc.setFontSize(10);
+  for (let angle = startAngle; angle < endAngle; angle += step) {
+    const next = Math.min(endAngle, angle + step);
+    const x1 = cx + radius * Math.cos((angle * Math.PI) / 180);
+    const y1 = cy + radius * Math.sin((angle * Math.PI) / 180);
+    const x2 = cx + radius * Math.cos((next * Math.PI) / 180);
+    const y2 = cy + radius * Math.sin((next * Math.PI) / 180);
+    doc.triangle(cx, cy, x1, y1, x2, y2, "F");
+  }
+}
+
+function drawPricePieChart(doc: jsPDF, startY: number, pricing: PricingResult) {
+  const parts: PiePart[] = [
+    { label: "Imposto", value: Math.max(0, pricing.taxCost), color: [248, 113, 113] },
+    { label: "Margem", value: Math.max(0, pricing.grossProfitValue), color: [96, 165, 250] },
+    { label: "Custo direto", value: Math.max(0, pricing.directCost), color: [16, 185, 129] },
+  ];
+
+  const total = parts.reduce((sum, part) => sum + part.value, 0);
+
+  doc.setFontSize(11);
   doc.setTextColor(28, 46, 39);
-  doc.text("Gráfico: participação dos insumos no custo direto", 14, startY);
+  doc.text("Formação de preço (gráfico)", 14, startY);
 
-  if (!totals.length) {
-    doc.text("Sem dados suficientes para gerar o gráfico.", 14, startY + 8);
-    return;
+  if (total <= 0) {
+    doc.setFontSize(9);
+    doc.text("Sem dados suficientes para gerar o gráfico de pizza.", 14, startY + 8);
+    return startY + 16;
   }
 
-  const maxValue = totals[0].value;
-  const xBase = 14;
-  const barX = 76;
-  const width = 100;
+  const centerX = 46;
+  const centerY = startY + 28;
+  const radius = 18;
 
-  totals.forEach((item, index) => {
-    const y = startY + 10 + index * 9;
-    const ratio = maxValue > 0 ? item.value / maxValue : 0;
-    const barWidth = ratio * width;
+  let currentAngle = -90;
+  for (const part of parts) {
+    const sweep = (part.value / total) * 360;
+    drawPieSlice(doc, centerX, centerY, radius, currentAngle, currentAngle + sweep, part.color);
+    currentAngle += sweep;
+  }
 
-    doc.setFontSize(9);
-    doc.text(item.name.slice(0, 22), xBase, y + 4);
+  doc.setDrawColor(255, 255, 255);
+  doc.setLineWidth(0.2);
+  doc.circle(centerX, centerY, radius);
 
-    doc.setFillColor(232, 236, 234);
-    doc.rect(barX, y, width, 5, "F");
-
-    doc.setFillColor(103, 232, 179);
-    doc.rect(barX, y, barWidth, 5, "F");
-
-    doc.text(currency(item.value), barX + width + 3, y + 4);
+  doc.setFontSize(9);
+  let legendY = startY + 14;
+  parts.forEach((part) => {
+    doc.setFillColor(part.color[0], part.color[1], part.color[2]);
+    doc.rect(78, legendY - 3.5, 4, 4, "F");
+    doc.setTextColor(28, 46, 39);
+    doc.text(`${part.label}: ${currency(part.value)}`, 85, legendY);
+    legendY += 8;
   });
+
+  doc.setFontSize(10);
+  doc.text(`Preço sugerido: ${currency(pricing.suggestedPrice)}`, 78, legendY + 4);
+
+  return startY + 44;
 }
 
 export function PdfButton({
@@ -144,7 +175,7 @@ export function PdfButton({
     );
 
     doc.setFontSize(11);
-    doc.text("Parâmetros e resultado", 14, y);
+    doc.text("Formação de preço", 14, y);
     y += 4;
 
     y = drawSimpleTable(
@@ -153,6 +184,8 @@ export function PdfButton({
       ["Imposto", "Margem", "Custo direto", "Preço sugerido"],
       [[percent(data.tax_rate), percent(data.profit_margin), currency(pricing.directCost), currency(pricing.suggestedPrice)]],
     );
+
+    y = drawPricePieChart(doc, y, pricing);
 
     doc.setFontSize(11);
     doc.text("Resumo financeiro", 14, y);
@@ -169,26 +202,25 @@ export function PdfButton({
     doc.text("Tabela de insumos", 14, y);
     y += 4;
 
-    const itemRows = data.items.map((item) => [
-      item.name || "Insumo",
-      String(item.quantity),
-      currency(item.unit_cost),
-      currency(item.quantity * item.unit_cost),
-    ]);
+    const itemRows = data.items
+      .filter((item) => item.name.trim().length > 0 && Number(item.quantity) > 0)
+      .map((item) => [
+        item.name,
+        String(item.quantity),
+        currency(item.unit_cost),
+        currency(item.quantity * item.unit_cost),
+      ]);
 
-    y = drawSimpleTable(doc, y, ["Insumo", "Quantidade", "Custo unitário", "Total"], itemRows);
-
-    if (y > 240) {
-      doc.addPage();
-      drawHeader(doc);
-      y = 40;
-    }
-
-    drawInsumosChart(doc, data, y);
+    y = drawSimpleTable(
+      doc,
+      y,
+      ["Insumo", "Quantidade", "Custo unitário", "Total"],
+      itemRows.length ? itemRows : [["Sem insumos informados", "-", "-", "-"]],
+    );
 
     doc.setFontSize(8);
     doc.setTextColor(90, 110, 102);
-    doc.text("Documento gerado automaticamente pelo Precifica SaaS", 14, 287);
+    doc.text("Documento gerado automaticamente pelo Precifica SaaS", 14, Math.min(287, y + 6));
 
     doc.save(`${(data.name || "precificacao").toLowerCase().replaceAll(" ", "-")}-precificacao.pdf`);
   };
