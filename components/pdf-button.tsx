@@ -9,7 +9,7 @@ import { PricingResult, ProcedureFormData } from "@/lib/types";
 type PiePart = {
   label: string;
   value: number;
-  color: [number, number, number];
+  color: string;
 };
 
 type DownloadPdfInput = {
@@ -85,30 +85,17 @@ function drawSimpleTable(doc: jsPDF, startY: number, headers: string[], rows: st
   return y + 6;
 }
 
-function drawPieSlice(doc: jsPDF, cx: number, cy: number, radius: number, startAngle: number, endAngle: number, color: [number, number, number]) {
-  const step = Math.max(2, Math.ceil((endAngle - startAngle) / 16));
-  doc.setFillColor(color[0], color[1], color[2]);
-
-  for (let angle = startAngle; angle < endAngle; angle += step) {
-    const next = Math.min(endAngle, angle + step);
-    const x1 = cx + radius * Math.cos((angle * Math.PI) / 180);
-    const y1 = cy + radius * Math.sin((angle * Math.PI) / 180);
-    const x2 = cx + radius * Math.cos((next * Math.PI) / 180);
-    const y2 = cy + radius * Math.sin((next * Math.PI) / 180);
-    doc.triangle(cx, cy, x1, y1, x2, y2, "F");
-  }
-}
-
 function drawPricePieChart(doc: jsPDF, startY: number, pricing: PricingResult) {
   const parts: PiePart[] = [
-    { label: "Imposto", value: Math.max(0, pricing.taxCost), color: [248, 113, 113] },
-    { label: "Margem", value: Math.max(0, pricing.grossProfitValue), color: [96, 165, 250] },
-    { label: "Custo direto", value: Math.max(0, pricing.directCost), color: [16, 185, 129] },
+    { label: "Imposto", value: Math.max(0, pricing.taxCost), color: "#ef4444" },
+    { label: "Margem", value: Math.max(0, pricing.grossProfitValue), color: "#3b82f6" },
+    { label: "Custo direto", value: Math.max(0, pricing.directCost), color: "#10b981" },
   ];
 
   const total = parts.reduce((sum, part) => sum + part.value, 0);
 
   doc.setFontSize(11);
+  doc.setTextColor(28, 46, 39);
   doc.text("Formação de preço (gráfico)", 14, startY);
 
   if (total <= 0) {
@@ -117,34 +104,60 @@ function drawPricePieChart(doc: jsPDF, startY: number, pricing: PricingResult) {
     return startY + 16;
   }
 
-  const centerX = 46;
-  const centerY = startY + 28;
-  const radius = 18;
+  const canvas = document.createElement("canvas");
+  canvas.width = 520;
+  canvas.height = 280;
+  const ctx = canvas.getContext("2d");
 
-  let currentAngle = -90;
-  for (const part of parts) {
-    const sweep = (part.value / total) * 360;
-    drawPieSlice(doc, centerX, centerY, radius, currentAngle, currentAngle + sweep, part.color);
-    currentAngle += sweep;
+  if (!ctx) {
+    doc.setFontSize(9);
+    doc.text("Não foi possível renderizar o gráfico.", 14, startY + 8);
+    return startY + 16;
   }
 
-  doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.2);
-  doc.circle(centerX, centerY, radius);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  doc.setFontSize(9);
-  let legendY = startY + 14;
+  const cx = 140;
+  const cy = 140;
+  const radius = 100;
+  let currentAngle = -Math.PI / 2;
+
   parts.forEach((part) => {
-    doc.setFillColor(part.color[0], part.color[1], part.color[2]);
-    doc.rect(78, legendY - 3.5, 4, 4, "F");
-    doc.text(`${part.label}: ${currency(part.value)}`, 85, legendY);
-    legendY += 8;
+    const slice = (part.value / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, currentAngle, currentAngle + slice);
+    ctx.closePath();
+    ctx.fillStyle = part.color;
+    ctx.fill();
+    currentAngle += slice;
   });
 
-  doc.setFontSize(10);
-  doc.text(`Preço sugerido: ${currency(pricing.suggestedPrice)}`, 78, legendY + 4);
+  ctx.beginPath();
+  ctx.arc(cx, cy, 52, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
 
-  return startY + 44;
+  ctx.font = "700 18px Arial";
+  ctx.fillStyle = "#0f172a";
+  ctx.fillText("Preço", 114, 132);
+  ctx.font = "700 16px Arial";
+  ctx.fillText(currency(pricing.suggestedPrice), 88, 154);
+
+  let legendY = 70;
+  parts.forEach((part) => {
+    ctx.fillStyle = part.color;
+    ctx.fillRect(280, legendY, 14, 14);
+    ctx.fillStyle = "#0f172a";
+    ctx.font = "600 16px Arial";
+    ctx.fillText(`${part.label}: ${currency(part.value)}`, 304, legendY + 12);
+    legendY += 40;
+  });
+
+  doc.addImage(canvas.toDataURL("image/png"), "PNG", 14, startY + 6, 182, 58);
+
+  return startY + 70;
 }
 
 export async function downloadProcedurePdf({ data, pricing, userName }: DownloadPdfInput) {

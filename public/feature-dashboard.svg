@@ -1,25 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" fill="none">
-  <rect width="1200" height="720" rx="28" fill="#0D2A25"/>
-  <rect x="40" y="40" width="1120" height="80" rx="18" fill="#123A33"/>
-  <rect x="72" y="68" width="220" height="24" rx="8" fill="#A5F3CF" fill-opacity="0.8"/>
-  <rect x="340" y="68" width="140" height="24" rx="8" fill="#6EE7B7" fill-opacity="0.6"/>
+﻿<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081F1B"/>
+      <stop offset="1" stop-color="#0E322C"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0F3A33"/>
+      <stop offset="1" stop-color="#123F37"/>
+    </linearGradient>
+    <linearGradient id="line1" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#67E8B3"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="line2" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
 
-  <rect x="40" y="150" width="360" height="220" rx="20" fill="#123A33"/>
-  <rect x="430" y="150" width="730" height="220" rx="20" fill="#123A33"/>
-  <rect x="40" y="400" width="560" height="280" rx="20" fill="#123A33"/>
-  <rect x="630" y="400" width="530" height="280" rx="20" fill="#123A33"/>
+  <rect width="1200" height="720" rx="32" fill="url(#bg)"/>
+  <rect x="36" y="36" width="1128" height="648" rx="24" fill="#0A2A24" stroke="#235D51"/>
 
-  <polyline points="470,320 560,260 640,290 730,220 820,240 900,190 1010,230" stroke="#6EE7B7" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="730" cy="220" r="10" fill="#FDE68A"/>
+  <rect x="68" y="78" width="330" height="120" rx="16" fill="url(#card)" stroke="#2D7A6A"/>
+  <text x="92" y="120" fill="#D9FFF1" font-family="Arial" font-size="22" font-weight="700">Receita projetada</text>
+  <text x="92" y="160" fill="#9FFFD9" font-family="Arial" font-size="42" font-weight="700">R$ 82.430</text>
 
-  <rect x="90" y="210" width="60" height="130" rx="8" fill="#6EE7B7"/>
-  <rect x="170" y="250" width="60" height="90" rx="8" fill="#86EFAC"/>
-  <rect x="250" y="185" width="60" height="155" rx="8" fill="#FDE68A"/>
+  <rect x="420" y="78" width="330" height="120" rx="16" fill="url(#card)" stroke="#2D7A6A"/>
+  <text x="444" y="120" fill="#D9FFF1" font-family="Arial" font-size="22" font-weight="700">Margem média</text>
+  <text x="444" y="160" fill="#9FFFD9" font-family="Arial" font-size="42" font-weight="700">47,8%</text>
 
-  <path d="M690 590 C760 500 860 500 930 590" stroke="#6EE7B7" stroke-width="14" fill="none"/>
-  <path d="M760 590 C810 540 880 540 930 590" stroke="#FDE68A" stroke-width="14" fill="none"/>
+  <rect x="772" y="78" width="330" height="120" rx="16" fill="url(#card)" stroke="#2D7A6A"/>
+  <text x="796" y="120" fill="#D9FFF1" font-family="Arial" font-size="22" font-weight="700">Procedimentos</text>
+  <text x="796" y="160" fill="#9FFFD9" font-family="Arial" font-size="42" font-weight="700">214</text>
 
-  <circle cx="220" cy="540" r="86" fill="#1D4D43"/>
-  <path d="M220 540 L220 468 A72 72 0 0 1 283 580 Z" fill="#6EE7B7"/>
-  <path d="M220 540 L283 580 A72 72 0 0 1 158 595 Z" fill="#FDE68A"/>
+  <rect x="68" y="228" width="676" height="420" rx="18" fill="#0E352E" stroke="#2D7A6A"/>
+  <text x="94" y="270" fill="#D9FFF1" font-family="Arial" font-size="22" font-weight="700">Performance Mensal</text>
+
+  <g opacity="0.25" stroke="#7AC7AF">
+    <line x1="94" y1="580" x2="718" y2="580"/>
+    <line x1="94" y1="520" x2="718" y2="520"/>
+    <line x1="94" y1="460" x2="718" y2="460"/>
+    <line x1="94" y1="400" x2="718" y2="400"/>
+    <line x1="94" y1="340" x2="718" y2="340"/>
+  </g>
+
+  <polyline points="94,560 172,540 250,500 328,470 406,450 484,420 562,385 640,360 718,330" fill="none" stroke="url(#line1)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="94,575 172,570 250,560 328,548 406,520 484,510 562,488 640,470 718,452" fill="none" stroke="url(#line2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="766" y="228" width="336" height="420" rx="18" fill="#0E352E" stroke="#2D7A6A"/>
+  <text x="792" y="270" fill="#D9FFF1" font-family="Arial" font-size="22" font-weight="700">Mix de Custos</text>
+
+  <circle cx="934" cy="410" r="120" fill="#0A2A24"/>
+  <path d="M934 410 L934 290 A120 120 0 0 1 1049 450 Z" fill="#3B82F6"/>
+  <path d="M934 410 L1049 450 A120 120 0 0 1 860 503 Z" fill="#10B981"/>
+  <path d="M934 410 L860 503 A120 120 0 0 1 934 290 Z" fill="#F87171"/>
+  <circle cx="934" cy="410" r="58" fill="#0E352E"/>
+
+  <rect x="792" y="560" width="12" height="12" fill="#3B82F6"/><text x="812" y="571" fill="#D9FFF1" font-family="Arial" font-size="16">Margem</text>
+  <rect x="924" y="560" width="12" height="12" fill="#10B981"/><text x="944" y="571" fill="#D9FFF1" font-family="Arial" font-size="16">Custo Direto</text>
+  <rect x="1064" y="560" width="12" height="12" fill="#F87171"/><text x="1084" y="571" fill="#D9FFF1" font-family="Arial" font-size="16">Impostos</text>
 </svg>
