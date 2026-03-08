@@ -203,7 +203,7 @@ export function PdfButton({
     y += 4;
 
     const itemRows = data.items
-      .filter((item) => item.name.trim().length > 0 && Number(item.quantity) > 0)
+      .filter((item) => item.name.trim().length > 0)
       .map((item) => [
         item.name,
         String(item.quantity),
@@ -231,3 +231,4 @@ export function PdfButton({
     </button>
   );
 }
+

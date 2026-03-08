@@ -1,4 +1,4 @@
-import { createSupabaseBrowserClient } from "@/lib/supabase";
+﻿import { createSupabaseBrowserClient } from "@/lib/supabase";
 import { defaultClinicSettings, defaultFixedCosts } from "@/lib/defaults";
 import {
   ClinicSettings,
@@ -26,6 +26,12 @@ function toError(error: unknown, fallback: string) {
   }
 
   return new Error(fallback);
+}
+
+function isDuplicateProcedureNameError(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const maybe = error as { code?: string; message?: string };
+  return maybe.code === "23505" && String(maybe.message ?? "").toLowerCase().includes("procedures");
 }
 
 export async function getCurrentUserId() {
@@ -194,7 +200,12 @@ export async function createProcedure(
     .select("id")
     .single();
 
-  if (error || !procedure) throw toError(error, "Nao foi possivel criar o procedimento.");
+  if (error || !procedure) {
+    if (isDuplicateProcedureNameError(error)) {
+      throw new Error("Já existe uma precificação com este nome de procedimento.");
+    }
+    throw toError(error, "Nao foi possivel criar o procedimento.");
+  }
 
   const itemPayload = input.items.map((item) => ({
     user_id: userId,
@@ -253,7 +264,12 @@ export async function updateProcedure(
     .eq("user_id", userId)
     .eq("id", procedureId);
 
-  if (procedureError) throw toError(procedureError, "Falha ao atualizar procedimento.");
+  if (procedureError) {
+    if (isDuplicateProcedureNameError(procedureError)) {
+      throw new Error("Já existe uma precificação com este nome de procedimento.");
+    }
+    throw toError(procedureError, "Falha ao atualizar procedimento.");
+  }
 
   const { error: deleteError } = await supabase.from("procedure_items").delete().eq("user_id", userId).eq("procedure_id", procedureId);
   if (deleteError) throw toError(deleteError, "Falha ao atualizar itens do procedimento.");
@@ -270,6 +286,12 @@ export async function updateProcedure(
     const { error: itemError } = await supabase.from("procedure_items").insert(itemPayload);
     if (itemError) throw toError(itemError, "Falha ao salvar itens atualizados.");
   }
+}
+
+export async function deleteProcedure(userId: string, procedureId: string) {
+  const supabase = createSupabaseBrowserClient();
+  const { error } = await supabase.from("procedures").delete().eq("user_id", userId).eq("id", procedureId);
+  if (error) throw toError(error, "Falha ao excluir procedimento.");
 }
 
 export async function listProcedures(userId: string): Promise<ProcedureRecord[]> {
@@ -300,6 +322,7 @@ export async function getProcedure(userId: string, procedureId: string): Promise
   const { data: items, error: itemsError } = await supabase
     .from("procedure_items")
     .select("id,name,quantity,unit_cost")
+    .eq("user_id", userId)
     .eq("procedure_id", procedureId)
     .order("created_at", { ascending: true });
 
