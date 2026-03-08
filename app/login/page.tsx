@@ -7,6 +7,8 @@ import { AuthGuard } from "@/components/auth-guard";
 import { upsertUserProfile } from "@/lib/data";
 import { isValidCpfOrCnpj, isValidPhone } from "@/lib/validators";
 
+const ACCESS_COUPON = "dozeroahof";
+
 function isMissingProfileTableError(message: string) {
   return message.includes("public.user_profiles") || message.includes("relation \"user_profiles\"");
 }
@@ -22,6 +24,7 @@ export default function LoginPage() {
   const [legalName, setLegalName] = useState("");
   const [documentNumber, setDocumentNumber] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [accessCoupon, setAccessCoupon] = useState("");
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -79,6 +82,12 @@ export default function LoginPage() {
           return;
         }
 
+        if (accessCoupon.trim().toLowerCase() !== ACCESS_COUPON) {
+          setMessage("Cupom de acesso inválido.");
+          setLoading(false);
+          return;
+        }
+
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -87,6 +96,7 @@ export default function LoginPage() {
               legal_name: legalName,
               document_number: documentNumber,
               contact_phone: contactPhone,
+              access_coupon: accessCoupon.trim().toLowerCase(),
             },
           },
         });
@@ -158,6 +168,10 @@ export default function LoginPage() {
                   <div>
                     <label className="label">Telefone</label>
                     <input className="input" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} required />
+                  </div>
+                  <div>
+                    <label className="label">Cupom de acesso</label>
+                    <input className="input" value={accessCoupon} onChange={(e) => setAccessCoupon(e.target.value)} required />
                   </div>
                 </>
               ) : null}
