@@ -12,6 +12,12 @@ type PiePart = {
   color: [number, number, number];
 };
 
+type DownloadPdfInput = {
+  data: ProcedureFormData;
+  pricing: PricingResult;
+  userName?: string;
+};
+
 function drawHeader(doc: jsPDF) {
   doc.setFillColor(11, 50, 44);
   doc.rect(0, 0, 210, 26, "F");
@@ -29,43 +35,50 @@ function drawHeader(doc: jsPDF) {
   doc.setTextColor(28, 46, 39);
 }
 
-function drawSimpleTable(doc: jsPDF, startY: number, headers: string[], rows: string[][]) {
-  const pageWidth = 182;
+function drawTableHeader(doc: jsPDF, y: number, headers: string[], colWidths: number[]) {
   const x = 14;
   const headerH = 8;
-  const rowH = 7;
-  const colW = pageWidth / headers.length;
-  let y = startY;
 
   doc.setFillColor(236, 245, 241);
-  doc.rect(x, y, pageWidth, headerH, "F");
-
+  doc.rect(x, y, 182, headerH, "F");
   doc.setFontSize(9);
-  doc.setTextColor(28, 46, 39);
 
-  headers.forEach((header, index) => {
-    doc.text(header, x + index * colW + 2, y + 5.5);
+  let currentX = x;
+  headers.forEach((header, i) => {
+    doc.text(header, currentX + 2, y + 5.5);
+    currentX += colWidths[i];
   });
 
-  y += headerH;
+  return y + headerH;
+}
+
+function drawSimpleTable(doc: jsPDF, startY: number, headers: string[], rows: string[][], colWidths?: number[]) {
+  const widths = colWidths && colWidths.length === headers.length
+    ? colWidths
+    : new Array(headers.length).fill(182 / headers.length);
+
+  const x = 14;
+  let y = drawTableHeader(doc, startY, headers, widths);
 
   rows.forEach((row) => {
-    if (y > 272) {
+    const wrapped = row.map((cell, i) => doc.splitTextToSize(String(cell || "-"), Math.max(8, widths[i] - 4)) as string[]);
+    const lines = Math.max(...wrapped.map((w) => w.length));
+    const rowH = Math.max(7, lines * 4.5 + 2);
+
+    if (y + rowH > 278) {
       doc.addPage();
       drawHeader(doc);
-      y = 36;
-      doc.setFillColor(236, 245, 241);
-      doc.rect(x, y, pageWidth, headerH, "F");
-      headers.forEach((header, index) => {
-        doc.text(header, x + index * colW + 2, y + 5.5);
-      });
-      y += headerH;
+      y = drawTableHeader(doc, 36, headers, widths);
     }
 
-    doc.rect(x, y, pageWidth, rowH);
-    row.forEach((cell, index) => {
-      doc.text((cell || "-").slice(0, 40), x + index * colW + 2, y + 4.8);
+    doc.rect(x, y, 182, rowH);
+
+    let currentX = x;
+    wrapped.forEach((cellLines, i) => {
+      doc.text(cellLines, currentX + 2, y + 4.5);
+      currentX += widths[i];
     });
+
     y += rowH;
   });
 
@@ -96,7 +109,6 @@ function drawPricePieChart(doc: jsPDF, startY: number, pricing: PricingResult) {
   const total = parts.reduce((sum, part) => sum + part.value, 0);
 
   doc.setFontSize(11);
-  doc.setTextColor(28, 46, 39);
   doc.text("Formação de preço (gráfico)", 14, startY);
 
   if (total <= 0) {
@@ -125,7 +137,6 @@ function drawPricePieChart(doc: jsPDF, startY: number, pricing: PricingResult) {
   parts.forEach((part) => {
     doc.setFillColor(part.color[0], part.color[1], part.color[2]);
     doc.rect(78, legendY - 3.5, 4, 4, "F");
-    doc.setTextColor(28, 46, 39);
     doc.text(`${part.label}: ${currency(part.value)}`, 85, legendY);
     legendY += 8;
   });
@@ -136,93 +147,89 @@ function drawPricePieChart(doc: jsPDF, startY: number, pricing: PricingResult) {
   return startY + 44;
 }
 
-export function PdfButton({
-  data,
-  pricing,
-  userName,
-}: {
-  data: ProcedureFormData;
-  pricing: PricingResult;
-  userName?: string;
-}) {
+export async function downloadProcedurePdf({ data, pricing, userName }: DownloadPdfInput) {
+  let profileName = userName || "Profissional";
+
+  try {
+    const userId = await getCurrentUserId();
+    const profile = await getUserProfile(userId);
+    if (profile?.legal_name) profileName = profile.legal_name;
+  } catch {
+    profileName = userName || "Profissional";
+  }
+
+  const doc = new jsPDF();
+  drawHeader(doc);
+
+  let y = 38;
+
+  doc.setFontSize(11);
+  doc.text("Dados gerais", 14, y);
+  y += 4;
+
+  y = drawSimpleTable(
+    doc,
+    y,
+    ["Usuário", "Procedimento", "Categoria", "Tempo clínico"],
+    [[profileName, data.name || "Não informado", data.category || "Não informada", `${data.clinical_hours} h`]],
+    [58, 52, 34, 38],
+  );
+
+  doc.setFontSize(11);
+  doc.text("Formação de preço", 14, y);
+  y += 4;
+
+  y = drawSimpleTable(
+    doc,
+    y,
+    ["Imposto", "Margem", "Custo direto", "Preço sugerido"],
+    [[percent(data.tax_rate), percent(data.profit_margin), currency(pricing.directCost), currency(pricing.suggestedPrice)]],
+  );
+
+  y = drawPricePieChart(doc, y, pricing);
+
+  doc.setFontSize(11);
+  doc.text("Resumo financeiro", 14, y);
+  y += 4;
+
+  y = drawSimpleTable(
+    doc,
+    y,
+    ["Custo operacional", "Subtotal", "Impostos", "Lucro bruto"],
+    [[currency(pricing.operationalCost), currency(pricing.subtotalCost), currency(pricing.taxCost), currency(pricing.grossProfitValue)]],
+  );
+
+  doc.setFontSize(11);
+  doc.text("Tabela de insumos", 14, y);
+  y += 4;
+
+  const itemRows = data.items
+    .filter((item) => item.name.trim().length > 0)
+    .map((item) => [
+      item.name,
+      String(item.quantity),
+      currency(item.unit_cost),
+      currency(item.quantity * item.unit_cost),
+    ]);
+
+  y = drawSimpleTable(
+    doc,
+    y,
+    ["Insumo", "Quantidade", "Custo unitário", "Total"],
+    itemRows.length ? itemRows : [["Sem insumos informados", "-", "-", "-"]],
+    [74, 30, 38, 40],
+  );
+
+  doc.setFontSize(8);
+  doc.setTextColor(90, 110, 102);
+  doc.text("Documento gerado automaticamente pelo Precifica SaaS", 14, Math.min(287, y + 6));
+
+  doc.save(`${(data.name || "precificacao").toLowerCase().replaceAll(" ", "-")}-precificacao.pdf`);
+}
+
+export function PdfButton({ data, pricing, userName }: DownloadPdfInput) {
   const onDownload = async () => {
-    let profileName = userName || "Profissional";
-
-    if (!userName) {
-      try {
-        const userId = await getCurrentUserId();
-        const profile = await getUserProfile(userId);
-        if (profile?.legal_name) profileName = profile.legal_name;
-      } catch {
-        profileName = "Profissional";
-      }
-    }
-
-    const doc = new jsPDF();
-    drawHeader(doc);
-
-    let y = 38;
-
-    doc.setFontSize(11);
-    doc.text("Dados gerais", 14, y);
-    y += 4;
-
-    y = drawSimpleTable(
-      doc,
-      y,
-      ["Usuário", "Procedimento", "Categoria", "Tempo clínico"],
-      [[profileName, data.name || "Não informado", data.category || "Não informada", `${data.clinical_hours} h`]],
-    );
-
-    doc.setFontSize(11);
-    doc.text("Formação de preço", 14, y);
-    y += 4;
-
-    y = drawSimpleTable(
-      doc,
-      y,
-      ["Imposto", "Margem", "Custo direto", "Preço sugerido"],
-      [[percent(data.tax_rate), percent(data.profit_margin), currency(pricing.directCost), currency(pricing.suggestedPrice)]],
-    );
-
-    y = drawPricePieChart(doc, y, pricing);
-
-    doc.setFontSize(11);
-    doc.text("Resumo financeiro", 14, y);
-    y += 4;
-
-    y = drawSimpleTable(
-      doc,
-      y,
-      ["Custo operacional", "Subtotal", "Impostos", "Lucro bruto"],
-      [[currency(pricing.operationalCost), currency(pricing.subtotalCost), currency(pricing.taxCost), currency(pricing.grossProfitValue)]],
-    );
-
-    doc.setFontSize(11);
-    doc.text("Tabela de insumos", 14, y);
-    y += 4;
-
-    const itemRows = data.items
-      .filter((item) => item.name.trim().length > 0)
-      .map((item) => [
-        item.name,
-        String(item.quantity),
-        currency(item.unit_cost),
-        currency(item.quantity * item.unit_cost),
-      ]);
-
-    y = drawSimpleTable(
-      doc,
-      y,
-      ["Insumo", "Quantidade", "Custo unitário", "Total"],
-      itemRows.length ? itemRows : [["Sem insumos informados", "-", "-", "-"]],
-    );
-
-    doc.setFontSize(8);
-    doc.setTextColor(90, 110, 102);
-    doc.text("Documento gerado automaticamente pelo Precifica SaaS", 14, Math.min(287, y + 6));
-
-    doc.save(`${(data.name || "precificacao").toLowerCase().replaceAll(" ", "-")}-precificacao.pdf`);
+    await downloadProcedurePdf({ data, pricing, userName });
   };
 
   return (
@@ -231,4 +238,3 @@ export function PdfButton({
     </button>
   );
 }
-
