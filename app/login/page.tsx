@@ -141,7 +141,7 @@ export default function LoginPage() {
       <div className="shell">
         <div className="container" style={{ maxWidth: 620 }}>
           <div className="glass card">
-            <div className="badge">Precifica SaaS</div>
+            <div className="badge">Precifica Serv Pro</div>
             <h1 className="heading-lg">Acesse sua conta ou realize seu cadastro</h1>
             <p className="muted">Cadastro com dados completos para personalizar a plataforma desde o primeiro acesso.</p>
 

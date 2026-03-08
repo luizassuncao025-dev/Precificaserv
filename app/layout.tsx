@@ -9,7 +9,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Precifica SaaS",
+  title: "Precifica Serv Pro",
   description: "Plataforma de precificação com histórico, PDF e acesso em nuvem.",
 };
 

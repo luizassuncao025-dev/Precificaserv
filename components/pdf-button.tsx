@@ -24,7 +24,7 @@ function drawHeader(doc: jsPDF) {
 
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(15);
-  doc.text("Precifica SaaS", 14, 14);
+  doc.text("Precifica Serv Pro", 14, 14);
   doc.setFontSize(9);
   doc.text("Relatório de Precificação", 14, 20);
 
@@ -235,7 +235,7 @@ export async function downloadProcedurePdf({ data, pricing, userName }: Download
 
   doc.setFontSize(8);
   doc.setTextColor(90, 110, 102);
-  doc.text("Documento gerado automaticamente pelo Precifica SaaS", 14, Math.min(287, y + 6));
+  doc.text("Documento gerado automaticamente pelo Precifica Serv Pro", 14, Math.min(287, y + 6));
 
   doc.save(`${(data.name || "precificacao").toLowerCase().replaceAll(" ", "-")}-precificacao.pdf`);
 }

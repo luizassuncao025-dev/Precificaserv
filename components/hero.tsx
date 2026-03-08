@@ -12,7 +12,7 @@ export function Hero() {
             <div>
               <h1 className="heading-xl">Converta custo em lucro com segurança.</h1>
               <p className="muted" style={{ fontSize: 18, lineHeight: 1.7, maxWidth: 680 }}>
-                O Precifica SaaS organiza custos fixos, compras de insumos e tempo clínico para gerar precificações
+                O Precifica Serv Pro organiza custos fixos, compras de insumos e tempo clínico para gerar precificações
                 estratégicas, proteger margem e aumentar a previsibilidade de caixa.
               </p>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 24 }}>

@@ -45,7 +45,7 @@ function Brand() {
         <Calculator size={20} />
       </div>
       <div>
-        <div style={{ fontWeight: 800 }}>Precifica SaaS</div>
+        <div style={{ fontWeight: 800 }}>Precifica Serv Pro</div>
         <div className="muted" style={{ fontSize: 13 }}>
           Precificação em nuvem
         </div>
