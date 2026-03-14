@@ -1,5 +1,5 @@
-import { Hero } from "@/components/hero";
+import { PublicLanding } from "@/components/public-landing";
 
 export default function HomePage() {
-  return <Hero />;
+  return <PublicLanding />;
 }
