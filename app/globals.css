@@ -691,3 +691,205 @@ tbody tr:hover {
     font-size: 0.9rem;
   }
 }
+
+.dashboard-hero-panel {
+  background:
+    radial-gradient(circle at 10% 18%, rgba(255, 209, 102, 0.14), transparent 26%),
+    radial-gradient(circle at 88% 18%, rgba(103, 232, 179, 0.12), transparent 28%),
+    linear-gradient(140deg, rgba(255, 209, 102, 0.04), rgba(103, 232, 179, 0.06)),
+    var(--surface);
+}
+
+.dashboard-hero-grid,
+.dashboard-split-grid,
+.dashboard-kpi-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.dashboard-hero-grid {
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  align-items: stretch;
+}
+
+.dashboard-copy {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-title,
+.dashboard-focus-card h2,
+.dashboard-insight-row strong,
+.dashboard-bar-copy strong {
+  margin: 0;
+}
+
+.dashboard-lead {
+  font-size: 1.06rem;
+  line-height: 1.75;
+  max-width: 760px;
+  margin: 0;
+}
+
+.dashboard-focus-card {
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(151, 190, 173, 0.18);
+  background: linear-gradient(180deg, rgba(14, 44, 38, 0.94), rgba(8, 26, 23, 0.96));
+}
+
+.dashboard-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.dashboard-focus-grid > div {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(151, 190, 173, 0.16);
+}
+
+.dashboard-focus-grid span,
+.dashboard-bar-copy span,
+.dashboard-kpi-head span {
+  display: block;
+  color: #9ecfbf;
+  font-size: 0.84rem;
+}
+
+.dashboard-focus-grid strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.2rem;
+}
+
+.dashboard-kpi-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dashboard-kpi-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-kpi-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -24px -24px auto;
+  width: 110px;
+  height: 110px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-kpi-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  color: #d8fff2;
+}
+
+.dashboard-kpi-small {
+  font-size: clamp(1.2rem, 2.4vw, 1.7rem);
+}
+
+.accent-gold {
+  background: linear-gradient(160deg, rgba(255, 209, 102, 0.12), rgba(15, 44, 37, 0.72));
+}
+
+.accent-green {
+  background: linear-gradient(160deg, rgba(103, 232, 179, 0.12), rgba(15, 44, 37, 0.72));
+}
+
+.accent-blue {
+  background: linear-gradient(160deg, rgba(96, 165, 250, 0.12), rgba(15, 44, 37, 0.72));
+}
+
+.accent-neutral {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(15, 44, 37, 0.72));
+}
+
+.dashboard-chart-card,
+.dashboard-insights-card {
+  min-width: 0;
+}
+
+.dashboard-bars,
+.dashboard-insights-list {
+  display: grid;
+  gap: 14px;
+}
+
+.dashboard-bar-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.8fr) minmax(0, 1.6fr) auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.dashboard-bar-track {
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(151, 190, 173, 0.16);
+}
+
+.dashboard-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(130deg, var(--accent), var(--accent-2));
+}
+
+.dashboard-bar-value {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dashboard-insight-row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(151, 190, 173, 0.14);
+}
+
+.dashboard-secondary-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+@media (max-width: 1180px) {
+  .dashboard-hero-grid,
+  .dashboard-kpi-grid,
+  .dashboard-split-grid,
+  .dashboard-focus-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .dashboard-actions,
+  .dashboard-secondary-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-bar-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .dashboard-bar-value {
+    white-space: normal;
+  }
+}
