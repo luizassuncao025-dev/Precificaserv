@@ -24,7 +24,7 @@ const loginHref = "/login" as Route;
 
 const problemPoints = [
   "tabela de colegas",
-  "sensação de mercado",
+  "sensaÃ§Ã£o de mercado",
   "tentativa e erro",
   "ou simplesmente no que parece justo",
 ];
@@ -38,17 +38,17 @@ const problemResults = [
 const mechanismCards = [
   {
     title: "Custos reais consolidados",
-    description: "O sistema reúne custos fixos, materiais, tempo clínico e imposto para calcular o preço com base concreta.",
+    description: "O sistema reÃºne custos fixos, materiais, tempo clÃ­nico e imposto para calcular o preÃ§o com base concreta.",
     icon: Landmark,
   },
   {
-    title: "Lógica automática de rentabilidade",
-    description: "A plataforma entrega a formação do preço e mostra onde estão custo direto, operação, impostos e margem.",
+    title: "LÃ³gica automÃ¡tica de rentabilidade",
+    description: "A plataforma entrega a formaÃ§Ã£o do preÃ§o e mostra onde estÃ£o custo direto, operaÃ§Ã£o, impostos e margem.",
     icon: Calculator,
   },
   {
-    title: "Clareza para decidir com segurança",
-    description: "Você entende o impacto de cada variável e deixa de depender de achismo para definir valor.",
+    title: "Clareza para decidir com seguranÃ§a",
+    description: "VocÃª entende o impacto de cada variÃ¡vel e deixa de depender de achismo para definir valor.",
     icon: Target,
   },
 ];
@@ -57,56 +57,56 @@ const steps = [
   {
     step: "Passo 1",
     title: "Cadastre seus procedimentos",
-    detail: "Organize o que você realiza com nome, categoria e tempo clínico.",
+    detail: "Organize o que vocÃª realiza com nome, categoria e tempo clÃ­nico.",
     icon: Stethoscope,
   },
   {
     step: "Passo 2",
-    title: "Informe os custos do consultório",
-    detail: "custos fixos, materiais, impostos e tempo clínico",
+    title: "Informe os custos do consultÃ³rio",
+    detail: "custos fixos, materiais, impostos e tempo clÃ­nico",
     icon: Receipt,
   },
   {
     step: "Passo 3",
     title: "Defina sua margem de lucro",
-    detail: "Escolha a margem desejada para transformar o cálculo em decisão estratégica.",
+    detail: "Escolha a margem desejada para transformar o cÃ¡lculo em decisÃ£o estratÃ©gica.",
     icon: TrendingUp,
   },
   {
     step: "Passo 4",
-    title: "Receba a precificação ideal",
-    detail: "Veja o valor sugerido com a composição completa do preço do procedimento.",
+    title: "Receba a precificaÃ§Ã£o ideal",
+    detail: "Veja o valor sugerido com a composiÃ§Ã£o completa do preÃ§o do procedimento.",
     icon: BadgeDollarSign,
   },
 ];
 
 const factors = [
-  { title: "Custos fixos do consultório", icon: Landmark },
-  { title: "Custos variáveis de materiais", icon: Coins },
-  { title: "Tempo clínico do procedimento", icon: Clock3 },
+  { title: "Custos fixos do consultÃ³rio", icon: Landmark },
+  { title: "Custos variÃ¡veis de materiais", icon: Coins },
+  { title: "Tempo clÃ­nico do procedimento", icon: Clock3 },
   { title: "Impostos", icon: Receipt },
   { title: "Margem de lucro desejada", icon: Target },
 ];
 
 const transformations = [
   "Cada procedimento passa a gerar lucro real",
-  "Você ganha clareza financeira sobre o negócio",
-  "Fica muito mais fácil tomar decisões estratégicas",
+  "VocÃª ganha clareza financeira sobre o negÃ³cio",
+  "Fica muito mais fÃ¡cil tomar decisÃµes estratÃ©gicas",
 ];
 
 const features = [
   { title: "Cadastro de procedimentos", icon: Stethoscope },
-  { title: "Cálculo automático de preços", icon: Calculator },
-  { title: "Simulação de margens de lucro", icon: TrendingUp },
-  { title: "Análise de rentabilidade por procedimento", icon: FileBarChart2 },
-  { title: "Histórico de cálculos e ajustes", icon: FileClock },
+  { title: "CÃ¡lculo automÃ¡tico de preÃ§os", icon: Calculator },
+  { title: "SimulaÃ§Ã£o de margens de lucro", icon: TrendingUp },
+  { title: "AnÃ¡lise de rentabilidade por procedimento", icon: FileBarChart2 },
+  { title: "HistÃ³rico de cÃ¡lculos e ajustes", icon: FileClock },
 ];
 
-const audience = ["Dentistas", "Médicos", "Biomédicos", "Esteticistas", "Fisioterapeutas", "Clínicas especializadas"];
+const audience = ["Dentistas", "MÃ©dicos", "BiomÃ©dicos", "Esteticistas", "Fisioterapeutas", "ClÃ­nicas especializadas"];
 
 const results = [
   "Mais clareza financeira",
-  "Mais segurança para definir preços",
+  "Mais seguranÃ§a para definir preÃ§os",
   "Mais lucro por procedimento",
 ];
 
@@ -122,13 +122,13 @@ export function PublicLanding() {
               </div>
               <div>
                 <strong>Precifica Serv Pro</strong>
-                <span>Motor de Rentabilidade Clínica™</span>
+                <span>Motor de Rentabilidade ClÃ­nicaâ„¢</span>
               </div>
             </div>
 
             <nav className="public-header-nav">
               <a href="#como-funciona">Como funciona</a>
-              <a href="#beneficios">Benefícios</a>
+              <a href="#beneficios">BenefÃ­cios</a>
               <a href="#funcionalidades">Funcionalidades</a>
             </nav>
 
@@ -145,21 +145,21 @@ export function PublicLanding() {
           <div className="public-hero-grid">
             <div className="public-hero-copy">
               <div className="badge">
-                <Sparkles size={16} /> Motor de Rentabilidade Clínica™
+                <Sparkles size={16} /> Motor de Rentabilidade ClÃ­nicaâ„¢
               </div>
               <h1 className="heading-xl public-hero-title">
-                Seu consultório pode estar trabalhando muito… e lucrando menos do que deveria.
+                Seu consultÃ³rio pode estar trabalhando muitoâ€¦ e lucrando menos do que deveria.
               </h1>
               <p className="public-hero-subtitle">
-                Descubra quanto realmente deveria cobrar pelos seus procedimentos usando o primeiro sistema de precificação clínica baseado em custos reais, tempo clínico e margem de lucro.
+                Descubra quanto realmente deveria cobrar pelos seus procedimentos usando o primeiro sistema de precificaÃ§Ã£o clÃ­nica baseado em custos reais, tempo clÃ­nico e margem de lucro.
               </p>
               <p className="muted public-hero-support">
-                O motor de precificação que transforma seu consultório em um negócio lucrativo.
+                O motor de precificaÃ§Ã£o que transforma seu consultÃ³rio em um negÃ³cio lucrativo.
               </p>
 
               <div className="public-hero-actions">
                 <Link href={signupHref} className="btn btn-primary">
-                  Calcular meus preços agora <ArrowRight size={16} />
+                  Calcular meus preÃ§os agora <ArrowRight size={16} />
                 </Link>
                 <a href="#como-funciona" className="btn btn-secondary">
                   Ver como funciona
@@ -176,7 +176,7 @@ export function PublicLanding() {
                   <strong>R$ 186,40</strong>
                 </div>
                 <div className="public-proof-card">
-                  <span>Preço sugerido</span>
+                  <span>PreÃ§o sugerido</span>
                   <strong>R$ 729,11</strong>
                 </div>
               </div>
@@ -188,14 +188,14 @@ export function PublicLanding() {
                   <span className="public-dot amber" />
                   <span className="public-dot green" />
                   <span className="public-dot blue" />
-                  <div className="public-mockup-title">Dashboard do Motor de Rentabilidade Clínica™</div>
+                  <div className="public-mockup-title">Dashboard do Motor de Rentabilidade ClÃ­nicaâ„¢</div>
                 </div>
 
                 <div className="public-mockup-grid">
                   <div className="public-mockup-panel primary">
-                    <span className="landing-mini-label">Preço sugerido</span>
+                    <span className="landing-mini-label">PreÃ§o sugerido</span>
                     <strong>R$ 1.284,70</strong>
-                    <p>Valor calculado com custos reais, tempo clínico, impostos e margem desejada.</p>
+                    <p>Valor calculado com custos reais, tempo clÃ­nico, impostos e margem desejada.</p>
                   </div>
 
                   <div className="public-mockup-mini-row">
@@ -215,8 +215,8 @@ export function PublicLanding() {
 
                   <div className="public-mockup-chart-card">
                     <div className="public-chart-head">
-                      <span className="landing-mini-label">Composição do preço</span>
-                      <strong>Harmonização facial</strong>
+                      <span className="landing-mini-label">ComposiÃ§Ã£o do preÃ§o</span>
+                      <strong>HarmonizaÃ§Ã£o facial</strong>
                     </div>
                     <div className="public-chart-area">
                       <div className="public-chart-donut" />
@@ -224,7 +224,7 @@ export function PublicLanding() {
                         <div><span className="legend-chip chip-red" /> Impostos</div>
                         <div><span className="legend-chip chip-blue" /> Margem</div>
                         <div><span className="legend-chip chip-green" /> Custo direto</div>
-                        <div><span className="legend-chip chip-gold" /> Operação</div>
+                        <div><span className="legend-chip chip-gold" /> OperaÃ§Ã£o</div>
                       </div>
                     </div>
                   </div>
@@ -237,27 +237,27 @@ export function PublicLanding() {
         <section className="glass card public-section-block public-problem-section">
           <div className="public-section-head narrow">
             <div className="badge">O problema</div>
-            <h2 className="heading-lg">O erro silencioso que acontece em milhares de consultórios</h2>
+            <h2 className="heading-lg">O erro silencioso que acontece em milhares de consultÃ³rios</h2>
           </div>
           <div className="public-problem-grid">
             <div className="public-problem-copy">
               <p>
-                Existe um erro silencioso que acontece em milhares de consultórios.
+                Existe um erro silencioso que acontece em milhares de consultÃ³rios.
               </p>
-              <p>Os preços dos procedimentos são definidos com base em:</p>
+              <p>Os preÃ§os dos procedimentos sÃ£o definidos com base em:</p>
               <div className="public-list-grid compact">
                 {problemPoints.map((item) => (
                   <div key={item} className="public-list-card">{item}</div>
                 ))}
               </div>
               <p>
-                O problema é que isso quase nunca reflete o custo real do procedimento.
+                O problema Ã© que isso quase nunca reflete o custo real do procedimento.
               </p>
             </div>
             <div className="public-problem-impact">
               <div className="public-impact-card">
                 <span className="landing-mini-label">Resultado</span>
-                <h3>Você trabalha mais do que deveria para lucrar menos do que poderia.</h3>
+                <h3>VocÃª trabalha mais do que deveria para lucrar menos do que poderia.</h3>
                 <div className="public-list-grid stacked">
                   {problemResults.map((item) => (
                     <div key={item} className="public-benefit-line">
@@ -273,10 +273,10 @@ export function PublicLanding() {
 
         <section className="glass card public-section-block public-mechanism-section">
           <div className="public-section-head narrow">
-            <div className="badge">A solução</div>
-            <h2 className="heading-lg">Apresentando o Motor de Rentabilidade Clínica™</h2>
+            <div className="badge">A soluÃ§Ã£o</div>
+            <h2 className="heading-lg">Apresentando o Motor de Rentabilidade ClÃ­nicaâ„¢</h2>
             <p className="muted public-section-copy">
-              Foi exatamente para resolver isso que criamos a plataforma. Um sistema que analisa todos os fatores financeiros do seu consultório e calcula automaticamente o valor ideal de cada procedimento. Sem achismo. Sem tentativa e erro. Baseado em números reais.
+              Foi exatamente para resolver isso que criamos a plataforma. Um sistema que analisa todos os fatores financeiros do seu consultÃ³rio e calcula automaticamente o valor ideal de cada procedimento. Sem achismo. Sem tentativa e erro. Baseado em nÃºmeros reais.
             </p>
           </div>
           <div className="public-feature-grid three-up">
@@ -317,8 +317,8 @@ export function PublicLanding() {
 
         <section className="glass card public-section-block">
           <div className="public-section-head narrow">
-            <div className="badge">Precisão do cálculo</div>
-            <h2 className="heading-lg">O que o sistema considera para calcular o preço ideal</h2>
+            <div className="badge">PrecisÃ£o do cÃ¡lculo</div>
+            <h2 className="heading-lg">O que o sistema considera para calcular o preÃ§o ideal</h2>
           </div>
           <div className="public-feature-grid five-up">
             {factors.map((item) => {
@@ -335,8 +335,8 @@ export function PublicLanding() {
 
         <section id="beneficios" className="glass card public-section-block public-impact-section">
           <div className="public-section-head narrow">
-            <div className="badge">Transformação</div>
-            <h2 className="heading-lg">O que muda quando a precificação é feita corretamente</h2>
+            <div className="badge">TransformaÃ§Ã£o</div>
+            <h2 className="heading-lg">O que muda quando a precificaÃ§Ã£o Ã© feita corretamente</h2>
           </div>
           <div className="public-impact-layout">
             <div className="public-impact-side">
@@ -349,7 +349,7 @@ export function PublicLanding() {
             </div>
             <div className="public-impact-summary">
               <p>
-                Na prática, você deixa de apenas atender pacientes e passa a administrar um negócio de saúde lucrativo.
+                Na prÃ¡tica, vocÃª deixa de apenas atender pacientes e passa a administrar um negÃ³cio de saÃºde lucrativo.
               </p>
             </div>
           </div>
@@ -375,10 +375,10 @@ export function PublicLanding() {
 
         <section className="glass card public-section-block">
           <div className="public-section-head narrow">
-            <div className="badge">Público-alvo</div>
-            <h2 className="heading-lg">Para quem é o sistema</h2>
+            <div className="badge">PÃºblico-alvo</div>
+            <h2 className="heading-lg">Para quem Ã© o sistema</h2>
             <p className="muted public-section-copy">
-              Profissionais da saúde que querem profissionalizar a gestão financeira do consultório.
+              Profissionais da saÃºde que querem profissionalizar a gestÃ£o financeira do consultÃ³rio.
             </p>
           </div>
           <div className="public-audience-grid">
@@ -390,14 +390,14 @@ export function PublicLanding() {
             ))}
           </div>
           <p className="public-audience-footnote">
-            Se você realiza procedimentos clínicos e cobra por eles, esse sistema foi feito para você.
+            Se vocÃª realiza procedimentos clÃ­nicos e cobra por eles, esse sistema foi feito para vocÃª.
           </p>
         </section>
 
         <section className="glass card public-section-block public-result-section">
           <div className="public-section-head narrow">
             <div className="badge">Resultado final</div>
-            <h2 className="heading-lg">O resultado é simples</h2>
+            <h2 className="heading-lg">O resultado Ã© simples</h2>
           </div>
           <div className="public-list-grid stacked wider">
             {results.map((item) => (
@@ -408,14 +408,14 @@ export function PublicLanding() {
             ))}
           </div>
           <p className="public-result-closing">
-            Porque um consultório saudável começa com uma precificação inteligente.
+            Porque um consultÃ³rio saudÃ¡vel comeÃ§a com uma precificaÃ§Ã£o inteligente.
           </p>
         </section>
 
         <section className="glass card public-final-cta">
           <div className="public-section-head narrow centered">
             <div className="badge">Comece agora</div>
-            <h2 className="heading-lg">Descubra agora quanto você realmente deveria cobrar pelos seus procedimentos.</h2>
+            <h2 className="heading-lg">Descubra agora quanto vocÃª realmente deveria cobrar pelos seus procedimentos.</h2>
           </div>
           <div className="public-final-actions">
             <Link href={signupHref} className="btn btn-primary">

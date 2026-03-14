@@ -14,9 +14,9 @@ const ACCESS_COUPON = "dozeroahof";
 const homeHref = "/" as Route;
 
 const proofItems = [
-  "PreÁo sugerido com base em custos reais",
-  "FormaÁ„o do preÁo com imposto, margem e operaÁ„o",
-  "HistÛrico de precificaÁıes para revisar decisıes",
+  "Pre√ßo sugerido com base em custos reais",
+  "Forma√ß√£o do pre√ßo com imposto, margem e opera√ß√£o",
+  "Hist√≥rico de precifica√ß√µes para revisar decis√µes",
 ];
 
 function isMissingProfileTableError(message: string) {
@@ -59,9 +59,9 @@ export default function LoginPage() {
         redirectTo: `${window.location.origin}/login`,
       });
       if (error) throw error;
-      setMessage("Enviamos um link de recuperaÁ„o de senha para o seu e-mail.");
+      setMessage("Enviamos um link de recupera√ß√£o de senha para o seu e-mail.");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "N„o foi possÌvel solicitar a recuperaÁ„o de senha.");
+      setMessage(error instanceof Error ? error.message : "N√£o foi poss√≠vel solicitar a recupera√ß√£o de senha.");
     }
   };
 
@@ -75,25 +75,25 @@ export default function LoginPage() {
 
       if (mode === "register") {
         if (!isValidCpfOrCnpj(documentNumber)) {
-          setMessage("CPF ou CNPJ inv·lido.");
+          setMessage("CPF ou CNPJ inv√°lido.");
           setLoading(false);
           return;
         }
 
         if (!isValidPhone(contactPhone)) {
-          setMessage("Telefone inv·lido. Informe DDD + n˙mero.");
+          setMessage("Telefone inv√°lido. Informe DDD + n√∫mero.");
           setLoading(false);
           return;
         }
 
         if (password.length < 6) {
-          setMessage("A senha precisa ter no mÌnimo 6 caracteres.");
+          setMessage("A senha precisa ter no m√≠nimo 6 caracteres.");
           setLoading(false);
           return;
         }
 
         if (accessCoupon.trim().toLowerCase() !== ACCESS_COUPON) {
-          setMessage("Cupom de acesso inv·lido.");
+          setMessage("Cupom de acesso inv√°lido.");
           setLoading(false);
           return;
         }
@@ -131,7 +131,7 @@ export default function LoginPage() {
           return;
         }
 
-        setMessage("Cadastro realizado. Confirme seu e-mail e depois faÁa login.");
+        setMessage("Cadastro realizado. Confirme seu e-mail e depois fa√ßa login.");
         setMode("login");
         return;
       }
@@ -140,7 +140,7 @@ export default function LoginPage() {
       if (error) throw error;
       router.push("/dashboard");
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "N„o foi possÌvel autenticar.");
+      setMessage(error instanceof Error ? error.message : "N√£o foi poss√≠vel autenticar.");
     } finally {
       setLoading(false);
     }
@@ -151,22 +151,22 @@ export default function LoginPage() {
       <div className="shell auth-shell">
         <div className="container auth-layout">
           <section className="glass card auth-visual-panel">
-            <Link href={homeHref} className="auth-back-link">Voltar para apresentaÁ„o</Link>
+            <Link href={homeHref} className="auth-back-link">Voltar para apresenta√ß√£o</Link>
             <div className="badge">
-              <Sparkles size={16} /> Motor de Rentabilidade ClÌnicaô
+              <Sparkles size={16} /> Motor de Rentabilidade Cl√≠nica‚Ñ¢
             </div>
             <h1 className="heading-lg auth-title">
-              Entre para transformar precificaÁ„o clÌnica em clareza, seguranÁa e lucro.
+              Entre para transformar precifica√ß√£o cl√≠nica em clareza, seguran√ßa e lucro.
             </h1>
             <p className="muted auth-lead">
-              Acesse sua conta para continuar sua gest„o ou crie seu acesso para comeÁar a calcular preÁos com base em custos reais e margem desejada.
+              Acesse sua conta para continuar sua gest√£o ou crie seu acesso para come√ßar a calcular pre√ßos com base em custos reais e margem desejada.
             </p>
 
             <div className="auth-highlight-panel">
               <div className="auth-highlight-card main">
-                <span className="landing-mini-label">Vis„o executiva</span>
-                <strong>PreÁo ideal por procedimento</strong>
-                <p>Veja a composiÁ„o completa do valor sugerido antes de salvar sua decis„o.</p>
+                <span className="landing-mini-label">Vis√£o executiva</span>
+                <strong>Pre√ßo ideal por procedimento</strong>
+                <p>Veja a composi√ß√£o completa do valor sugerido antes de salvar sua decis√£o.</p>
               </div>
               <div className="auth-mini-metrics">
                 <div>
@@ -178,7 +178,7 @@ export default function LoginPage() {
                   <strong>R$ 412,70</strong>
                 </div>
                 <div>
-                  <span>PreÁo sugerido</span>
+                  <span>Pre√ßo sugerido</span>
                   <strong>R$ 1.128,40</strong>
                 </div>
               </div>
@@ -197,15 +197,15 @@ export default function LoginPage() {
               <div className="auth-bottom-card">
                 <ShieldCheck size={18} />
                 <div>
-                  <strong>Dados por usu·rio</strong>
-                  <span>Seu histÛrico e configuraÁıes ficam separados por conta.</span>
+                  <strong>Dados por usu√°rio</strong>
+                  <span>Seu hist√≥rico e configura√ß√µes ficam separados por conta.</span>
                 </div>
               </div>
               <div className="auth-bottom-card">
                 <TrendingUp size={18} />
                 <div>
-                  <strong>Decis„o com margem</strong>
-                  <span>O sistema mostra preÁo sugerido com lÛgica de rentabilidade.</span>
+                  <strong>Decis√£o com margem</strong>
+                  <span>O sistema mostra pre√ßo sugerido com l√≥gica de rentabilidade.</span>
                 </div>
               </div>
             </div>
@@ -218,7 +218,7 @@ export default function LoginPage() {
               </div>
               <div>
                 <strong>Precifica Serv Pro</strong>
-                <span className="muted">Acesso ‡ plataforma</span>
+                <span className="muted">Acesso √† plataforma</span>
               </div>
             </div>
 
@@ -226,8 +226,8 @@ export default function LoginPage() {
               <h2 className="heading-lg">{mode === "login" ? "Entrar no sistema" : "Criar sua conta"}</h2>
               <p className="muted">
                 {mode === "login"
-                  ? "Entre para acessar seu painel, histÛrico e c·lculos salvos."
-                  : "Cadastre seus dados para iniciar sua estrutura de precificaÁ„o profissional."}
+                  ? "Entre para acessar seu painel, hist√≥rico e c√°lculos salvos."
+                  : "Cadastre seus dados para iniciar sua estrutura de precifica√ß√£o profissional."}
               </p>
             </div>
 
@@ -244,7 +244,7 @@ export default function LoginPage() {
               {mode === "register" ? (
                 <>
                   <div>
-                    <label className="label">Nome ou Raz„o Social</label>
+                    <label className="label">Nome ou Raz√£o Social</label>
                     <input className="input" value={legalName} onChange={(e) => setLegalName(e.target.value)} required />
                   </div>
                   <div>

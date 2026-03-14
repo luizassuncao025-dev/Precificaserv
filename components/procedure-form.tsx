@@ -66,7 +66,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
 
         setForm((current) => ({ ...current, items: applyLastPurchaseToItems(current.items, purchasesData) }));
       } catch (error) {
-        setMessage(error instanceof Error ? error.message : "Não foi possível carregar dados iniciais.");
+        setMessage(error instanceof Error ? error.message : "NÃ£o foi possÃ­vel carregar dados iniciais.");
       } finally {
         setLoading(false);
       }
@@ -105,7 +105,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
       ...current,
       items: applyLastPurchaseToItems(current.items, lastPurchases),
     }));
-    setMessage("Custos unitários atualizados com base em Últimas Compras.");
+    setMessage("Custos unitÃ¡rios atualizados com base em Ãšltimas Compras.");
   };
 
   const onSave = async () => {
@@ -113,14 +113,14 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
     setMessage("");
 
     if (!lastPurchases.length) {
-      setMessage("Cadastre insumos em Últimas Compras antes de salvar a precificação.");
+      setMessage("Cadastre insumos em Ãšltimas Compras antes de salvar a precificaÃ§Ã£o.");
       setSaving(false);
       return;
     }
 
     const hasInvalidItem = form.items.some((item) => !item.name || !findPurchaseByName(item.name, lastPurchases));
     if (hasInvalidItem) {
-      setMessage("Todos os insumos devem ser selecionados a partir da lista de Últimas Compras.");
+      setMessage("Todos os insumos devem ser selecionados a partir da lista de Ãšltimas Compras.");
       setSaving(false);
       return;
     }
@@ -137,15 +137,15 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
 
       if (mode === "edit" && procedureId) {
         await updateProcedure(userId, procedureId, payload);
-        setMessage("Precificação atualizada com sucesso.");
+        setMessage("PrecificaÃ§Ã£o atualizada com sucesso.");
         router.push(`/procedures/${procedureId}`);
       } else {
         const createdId = await createProcedure(userId, payload);
-        setMessage("Precificação salva com sucesso.");
+        setMessage("PrecificaÃ§Ã£o salva com sucesso.");
         router.push(`/procedures/${createdId}`);
       }
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Falha ao salvar precificação.");
+      setMessage(error instanceof Error ? error.message : "Falha ao salvar precificaÃ§Ã£o.");
     } finally {
       setSaving(false);
     }
@@ -160,35 +160,35 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
       <section className="glass card procedure-hero-panel">
         <div className="procedure-hero-grid">
           <div className="procedure-copy">
-            <div className="badge"><Sparkles size={14} /> {mode === "edit" ? "Editar precificação" : "Nova precificação"}</div>
-            <h1 className="heading-lg procedure-title">Construa a precificação com clareza e deixe o sistema calcular o resto.</h1>
+            <div className="badge"><Sparkles size={14} /> {mode === "edit" ? "Editar precificaÃ§Ã£o" : "Nova precificaÃ§Ã£o"}</div>
+            <h1 className="heading-lg procedure-title">Construa a precificaÃ§Ã£o com clareza e deixe o sistema calcular o resto.</h1>
             <p className="muted procedure-lead">
-              Preencha os dados essenciais do procedimento, selecione insumos a partir de Últimas Compras e acompanhe a formação do preço em tempo real.
+              Preencha os dados essenciais do procedimento, selecione insumos a partir de Ãšltimas Compras e acompanhe a formaÃ§Ã£o do preÃ§o em tempo real.
             </p>
             <div className="procedure-actions-row">
               <PdfButton data={form} pricing={pricing} userName={userName} />
               <button type="button" className="btn btn-secondary" onClick={syncCostsWithLastPurchase}>
-                <RefreshCcw size={16} /> Aplicar Última Compra
+                <RefreshCcw size={16} /> Aplicar Ãšltima Compra
               </button>
               <button type="button" className="btn btn-primary" onClick={onSave} disabled={saving}>
-                {saving ? "Salvando..." : mode === "edit" ? "Salvar alterações" : "Salvar precificação"}
+                {saving ? "Salvando..." : mode === "edit" ? "Salvar alteraÃ§Ãµes" : "Salvar precificaÃ§Ã£o"}
               </button>
             </div>
             <div className="procedure-shortcuts">
               <Link href="/procedures/new" className="btn btn-secondary">Nova estrutura</Link>
               <Link href="/fixed-costs" className="btn btn-secondary">Ir para Custos Fixos</Link>
-              <Link href="/last-purchases" className="btn btn-secondary">Ir para Últimas Compras</Link>
+              <Link href="/last-purchases" className="btn btn-secondary">Ir para Ãšltimas Compras</Link>
             </div>
             {message ? <div className="badge procedure-message">{message}</div> : null}
           </div>
 
           <aside className="procedure-summary-card">
-            <span className="landing-mini-label">Leitura da precificação</span>
-            <h2>{form.name || "Procedimento em construção"}</h2>
-            <p className="muted">{form.category || "Defina categoria, tempo clínico e insumos para consolidar o valor sugerido."}</p>
+            <span className="landing-mini-label">Leitura da precificaÃ§Ã£o</span>
+            <h2>{form.name || "Procedimento em construÃ§Ã£o"}</h2>
+            <p className="muted">{form.category || "Defina categoria, tempo clÃ­nico e insumos para consolidar o valor sugerido."}</p>
 
             <div className="procedure-price-emphasis">
-              <span>Preço sugerido</span>
+              <span>PreÃ§o sugerido</span>
               <strong>{currency(pricing.suggestedPrice)}</strong>
             </div>
 
@@ -212,7 +212,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
             </div>
 
             <div className="procedure-summary-note">
-              <ArrowRight size={16} /> {selectedItems.length} insumo(s) selecionado(s) a partir de Últimas Compras.
+              <ArrowRight size={16} /> {selectedItems.length} insumo(s) selecionado(s) a partir de Ãšltimas Compras.
             </div>
           </aside>
         </div>
@@ -222,14 +222,14 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
         <div className="procedure-step-head">
           <div>
             <div className="badge">Etapa 1</div>
-            <h2 className="heading-lg" style={{ marginTop: 12 }}>Base de custos do negócio</h2>
-            <p className="muted">Esta base vem de Custos Fixos e sustenta automaticamente o valor da sua hora clínica.</p>
+            <h2 className="heading-lg" style={{ marginTop: 12 }}>Base de custos do negÃ³cio</h2>
+            <p className="muted">Esta base vem de Custos Fixos e sustenta automaticamente o valor da sua hora clÃ­nica.</p>
           </div>
         </div>
         <div className="grid grid-3" style={{ marginTop: 20 }}>
           <div className="stat procedure-stat-card"><div className="muted">Custos fixos</div><div className="kpi">{currency(pricing.totalFixedCosts)}</div></div>
-          <div className="stat procedure-stat-card"><div className="muted">Horas clínicas mensais</div><div className="kpi">{pricing.monthlyClinicalHours}</div></div>
-          <div className="stat procedure-stat-card"><div className="muted">Hora clínica</div><div className="kpi">{currency(pricing.costPerClinicalHour)}</div></div>
+          <div className="stat procedure-stat-card"><div className="muted">Horas clÃ­nicas mensais</div><div className="kpi">{pricing.monthlyClinicalHours}</div></div>
+          <div className="stat procedure-stat-card"><div className="muted">Hora clÃ­nica</div><div className="kpi">{currency(pricing.costPerClinicalHour)}</div></div>
         </div>
       </section>
 
@@ -238,7 +238,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
           <div>
             <div className="badge">Etapa 2</div>
             <h2 className="heading-lg" style={{ marginTop: 12 }}>Dados do procedimento</h2>
-            <p className="muted">Defina a estrutura principal do serviço para que o cálculo reflita a realidade da execução.</p>
+            <p className="muted">Defina a estrutura principal do serviÃ§o para que o cÃ¡lculo reflita a realidade da execuÃ§Ã£o.</p>
           </div>
         </div>
         <div className="grid grid-2" style={{ marginTop: 16 }}>
@@ -251,11 +251,11 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
             <input className="input" value={form.category} onChange={(e) => setForm((current) => ({ ...current, category: e.target.value }))} />
           </div>
           <div>
-            <label className="label">Tempo clínico (horas)</label>
+            <label className="label">Tempo clÃ­nico (horas)</label>
             <input className="input" type="number" step="0.1" value={form.clinical_hours} onChange={(e) => setForm((current) => ({ ...current, clinical_hours: Number(e.target.value) }))} />
           </div>
           <div>
-            <label className="label">Alíquota de imposto (%)</label>
+            <label className="label">AlÃ­quota de imposto (%)</label>
             <input className="input" type="number" step="0.1" value={form.tax_rate} onChange={(e) => setForm((current) => ({ ...current, tax_rate: Number(e.target.value) }))} />
           </div>
           <div>
@@ -263,7 +263,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
             <input className="input" type="number" step="0.1" value={form.profit_margin} onChange={(e) => setForm((current) => ({ ...current, profit_margin: Number(e.target.value) }))} />
           </div>
           <div style={{ gridColumn: "1 / -1" }}>
-            <label className="label">Observações</label>
+            <label className="label">ObservaÃ§Ãµes</label>
             <textarea className="textarea" value={form.notes} onChange={(e) => setForm((current) => ({ ...current, notes: e.target.value }))} />
           </div>
         </div>
@@ -274,7 +274,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
           <div>
             <div className="badge">Etapa 3</div>
             <h2 className="heading-lg" style={{ marginTop: 12 }}>Insumos do procedimento</h2>
-            <p className="muted">Selecione apenas insumos cadastrados em Últimas Compras para manter o custo unitário consistente.</p>
+            <p className="muted">Selecione apenas insumos cadastrados em Ãšltimas Compras para manter o custo unitÃ¡rio consistente.</p>
           </div>
           <button type="button" className="btn btn-secondary" onClick={addMaterial}><Plus size={16} /> Adicionar item</button>
         </div>
@@ -286,7 +286,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
                 <th>Insumo</th>
                 <th>Unidade</th>
                 <th>Quantidade usada</th>
-                <th>Custo unitário</th>
+                <th>Custo unitÃ¡rio</th>
                 <th>Total</th>
                 <th></th>
               </tr>
@@ -355,15 +355,15 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
         <div className="procedure-step-head">
           <div>
             <div className="badge">Etapa 4</div>
-            <h2 className="heading-lg" style={{ marginTop: 12 }}>Formação do preço</h2>
-            <p className="muted">Acompanhe abaixo a composição final do valor sugerido para validar se a estratégia está coerente.</p>
+            <h2 className="heading-lg" style={{ marginTop: 12 }}>FormaÃ§Ã£o do preÃ§o</h2>
+            <p className="muted">Acompanhe abaixo a composiÃ§Ã£o final do valor sugerido para validar se a estratÃ©gia estÃ¡ coerente.</p>
           </div>
         </div>
         <div className="procedure-result-grid">
           <div className="stat procedure-result-highlight">
-            <div className="muted">Preço sugerido</div>
+            <div className="muted">PreÃ§o sugerido</div>
             <div className="kpi">{currency(pricing.suggestedPrice)}</div>
-            <p className="muted">Valor final considerando custo direto, operação, imposto e margem desejada.</p>
+            <p className="muted">Valor final considerando custo direto, operaÃ§Ã£o, imposto e margem desejada.</p>
           </div>
           <div className="grid grid-2 procedure-result-metrics">
             <div className="stat"><div className="muted">Custo direto</div><div className="kpi">{currency(pricing.directCost)}</div></div>

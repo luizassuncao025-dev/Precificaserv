@@ -65,21 +65,21 @@ export default function DashboardPage() {
   const spotlight = useMemo(() => {
     if (!rows.length) {
       return {
-        title: "Estruture sua primeira precificação",
-        description: "Cadastre custos fixos, atualize últimas compras e gere a primeira formação de preço com base real.",
+        title: "Estruture sua primeira precificaÃ§Ã£o",
+        description: "Cadastre custos fixos, atualize Ãºltimas compras e gere a primeira formaÃ§Ã£o de preÃ§o com base real.",
       };
     }
 
     if (metrics.avgMargin < 30) {
       return {
-        title: "Sua margem média merece atenção",
-        description: "Revisar imposto, custo direto e tempo clínico pode abrir espaço para um preço final mais saudável.",
+        title: "Sua margem mÃ©dia merece atenÃ§Ã£o",
+        description: "Revisar imposto, custo direto e tempo clÃ­nico pode abrir espaÃ§o para um preÃ§o final mais saudÃ¡vel.",
       };
     }
 
     return {
-      title: "Sua operação já tem base para crescer com controle",
-      description: "Use o histórico para comparar procedimentos, revisar margens e identificar os serviços mais estratégicos.",
+      title: "Sua operaÃ§Ã£o jÃ¡ tem base para crescer com controle",
+      description: "Use o histÃ³rico para comparar procedimentos, revisar margens e identificar os serviÃ§os mais estratÃ©gicos.",
     };
   }, [metrics.avgMargin, rows.length]);
 
@@ -95,31 +95,31 @@ export default function DashboardPage() {
                 </div>
                 <h1 className="heading-lg dashboard-title">{getGreeting()}, {userName}.</h1>
                 <p className="muted dashboard-lead">
-                  Este painel consolida a saúde da sua precificação. Aqui você acompanha valor médio, margem, procedimentos
-                  recentes e sinais que ajudam a decidir com mais segurança.
+                  Este painel consolida a saÃºde da sua precificaÃ§Ã£o. Aqui vocÃª acompanha valor mÃ©dio, margem, procedimentos
+                  recentes e sinais que ajudam a decidir com mais seguranÃ§a.
                 </p>
                 <div className="dashboard-actions" style={{ marginTop: 10 }}>
-                  <Link href="/procedures/new" className="btn btn-primary">Nova Precificação <ArrowRight size={16} /></Link>
+                  <Link href="/procedures/new" className="btn btn-primary">Nova PrecificaÃ§Ã£o <ArrowRight size={16} /></Link>
                   <Link href="/fixed-costs" className="btn btn-secondary">Configurar custos fixos</Link>
-                  <Link href="/last-purchases" className="btn btn-secondary">Atualizar últimas compras</Link>
+                  <Link href="/last-purchases" className="btn btn-secondary">Atualizar Ãºltimas compras</Link>
                 </div>
               </div>
 
               <div className="dashboard-focus-card">
-                <span className="landing-mini-label">Leitura rápida</span>
+                <span className="landing-mini-label">Leitura rÃ¡pida</span>
                 <h2>{spotlight.title}</h2>
                 <p className="muted">{spotlight.description}</p>
                 <div className="dashboard-focus-grid">
                   <div>
-                    <span>Precificações</span>
+                    <span>PrecificaÃ§Ãµes</span>
                     <strong>{metrics.totalProcedures}</strong>
                   </div>
                   <div>
-                    <span>Preço médio</span>
+                    <span>PreÃ§o mÃ©dio</span>
                     <strong>{currency(metrics.avgPrice)}</strong>
                   </div>
                   <div>
-                    <span>Margem média</span>
+                    <span>Margem mÃ©dia</span>
                     <strong>{metrics.avgMargin.toFixed(1)}%</strong>
                   </div>
                 </div>
@@ -131,24 +131,24 @@ export default function DashboardPage() {
 
           <section className="dashboard-kpi-grid">
             <div className="stat dashboard-kpi-card accent-gold">
-              <div className="dashboard-kpi-head"><BadgeDollarSign size={18} /><span>Preço médio sugerido</span></div>
+              <div className="dashboard-kpi-head"><BadgeDollarSign size={18} /><span>PreÃ§o mÃ©dio sugerido</span></div>
               <div className="kpi">{currency(metrics.avgPrice)}</div>
-              <p className="muted">Média das precificações cadastradas até agora.</p>
+              <p className="muted">MÃ©dia das precificaÃ§Ãµes cadastradas atÃ© agora.</p>
             </div>
             <div className="stat dashboard-kpi-card accent-green">
-              <div className="dashboard-kpi-head"><Target size={18} /><span>Margem média</span></div>
+              <div className="dashboard-kpi-head"><Target size={18} /><span>Margem mÃ©dia</span></div>
               <div className="kpi">{metrics.avgMargin.toFixed(1)}%</div>
-              <p className="muted">Leitura da margem desejada utilizada nas suas precificações.</p>
+              <p className="muted">Leitura da margem desejada utilizada nas suas precificaÃ§Ãµes.</p>
             </div>
             <div className="stat dashboard-kpi-card accent-blue">
-              <div className="dashboard-kpi-head"><ChartColumnBig size={18} /><span>Maior preço sugerido</span></div>
+              <div className="dashboard-kpi-head"><ChartColumnBig size={18} /><span>Maior preÃ§o sugerido</span></div>
               <div className="kpi dashboard-kpi-small">{metrics.highest ? currency(metrics.highest.suggested_price) : "-"}</div>
-              <p className="muted">{metrics.highest ? metrics.highest.name : "Cadastre precificações para comparar resultados."}</p>
+              <p className="muted">{metrics.highest ? metrics.highest.name : "Cadastre precificaÃ§Ãµes para comparar resultados."}</p>
             </div>
             <div className="stat dashboard-kpi-card accent-neutral">
-              <div className="dashboard-kpi-head"><Clock3 size={18} /><span>Última atualização</span></div>
+              <div className="dashboard-kpi-head"><Clock3 size={18} /><span>Ãšltima atualizaÃ§Ã£o</span></div>
               <div className="kpi dashboard-kpi-small">{metrics.latest ? metrics.latest.name : "-"}</div>
-              <p className="muted">{metrics.latest ? formatDateTime(metrics.latest.updated_at) : "Ainda sem movimentação registrada."}</p>
+              <p className="muted">{metrics.latest ? formatDateTime(metrics.latest.updated_at) : "Ainda sem movimentaÃ§Ã£o registrada."}</p>
             </div>
           </section>
 
@@ -156,16 +156,16 @@ export default function DashboardPage() {
             <div className="glass card dashboard-chart-card">
               <div className="dashboard-section-head">
                 <div>
-                  <div className="badge">Visão dos últimos registros</div>
-                  <h2 className="heading-lg" style={{ marginTop: 12 }}>Evolução recente de preço sugerido</h2>
-                  <p className="muted">Cada barra representa uma das últimas precificações salvas.</p>
+                  <div className="badge">VisÃ£o dos Ãºltimos registros</div>
+                  <h2 className="heading-lg" style={{ marginTop: 12 }}>EvoluÃ§Ã£o recente de preÃ§o sugerido</h2>
+                  <p className="muted">Cada barra representa uma das Ãºltimas precificaÃ§Ãµes salvas.</p>
                 </div>
               </div>
 
               {loading ? (
-                <div className="empty-state" style={{ marginTop: 16 }}>Carregando histórico...</div>
+                <div className="empty-state" style={{ marginTop: 16 }}>Carregando histÃ³rico...</div>
               ) : metrics.recent.length === 0 ? (
-                <div className="empty-state" style={{ marginTop: 16 }}>Cadastre a primeira precificação para visualizar este painel.</div>
+                <div className="empty-state" style={{ marginTop: 16 }}>Cadastre a primeira precificaÃ§Ã£o para visualizar este painel.</div>
               ) : (
                 <div className="dashboard-bars" style={{ marginTop: 20 }}>
                   {metrics.recent.map((row) => {
@@ -188,34 +188,34 @@ export default function DashboardPage() {
             </div>
 
             <div className="glass card dashboard-insights-card">
-              <div className="badge">Resumo estratégico</div>
+              <div className="badge">Resumo estratÃ©gico</div>
               <h2 className="heading-lg" style={{ marginTop: 12 }}>Pontos para acompanhar na rotina</h2>
               <div className="dashboard-insights-list">
                 <div className="dashboard-insight-row">
                   <Wallet size={18} />
                   <div>
                     <strong>Base financeira</strong>
-                    <p className="muted">Custos fixos bem atualizados elevam a confiança no valor da hora clínica.</p>
+                    <p className="muted">Custos fixos bem atualizados elevam a confianÃ§a no valor da hora clÃ­nica.</p>
                   </div>
                 </div>
                 <div className="dashboard-insight-row">
                   <ChartColumnBig size={18} />
                   <div>
-                    <strong>Comparação entre procedimentos</strong>
-                    <p className="muted">O histórico ajuda a identificar quais serviços sustentam melhor a margem desejada.</p>
+                    <strong>ComparaÃ§Ã£o entre procedimentos</strong>
+                    <p className="muted">O histÃ³rico ajuda a identificar quais serviÃ§os sustentam melhor a margem desejada.</p>
                   </div>
                 </div>
                 <div className="dashboard-insight-row">
                   <Clock3 size={18} />
                   <div>
-                    <strong>Atualização constante</strong>
-                    <p className="muted">Últimas compras atualizadas evitam preço sugerido defasado por custo antigo.</p>
+                    <strong>AtualizaÃ§Ã£o constante</strong>
+                    <p className="muted">Ãšltimas compras atualizadas evitam preÃ§o sugerido defasado por custo antigo.</p>
                   </div>
                 </div>
               </div>
               <div className="dashboard-secondary-actions">
-                <Link href="/history" className="btn btn-secondary">Abrir histórico</Link>
-                <Link href="/profile" className="btn btn-secondary">Dados do usuário</Link>
+                <Link href="/history" className="btn btn-secondary">Abrir histÃ³rico</Link>
+                <Link href="/profile" className="btn btn-secondary">Dados do usuÃ¡rio</Link>
               </div>
             </div>
           </section>
@@ -223,17 +223,17 @@ export default function DashboardPage() {
           <div className="glass card">
             <div className="dashboard-section-head">
               <div>
-                <div className="badge">Histórico recente</div>
-                <h2 className="heading-lg" style={{ marginTop: 12 }}>Últimas precificações</h2>
+                <div className="badge">HistÃ³rico recente</div>
+                <h2 className="heading-lg" style={{ marginTop: 12 }}>Ãšltimas precificaÃ§Ãµes</h2>
                 <p className="muted">Reabra, compare e refine seus procedimentos em poucos cliques.</p>
               </div>
-              <Link href="/procedures/new" className="btn btn-primary">Precificação: Novo Procedimento <ArrowRight size={16} /></Link>
+              <Link href="/procedures/new" className="btn btn-primary">PrecificaÃ§Ã£o: Novo Procedimento <ArrowRight size={16} /></Link>
             </div>
 
             {loading ? (
-              <div className="empty-state" style={{ marginTop: 16 }}>Carregando histórico...</div>
+              <div className="empty-state" style={{ marginTop: 16 }}>Carregando histÃ³rico...</div>
             ) : rows.length === 0 ? (
-              <div className="empty-state" style={{ marginTop: 16 }}>Ainda não existem precificações salvas.</div>
+              <div className="empty-state" style={{ marginTop: 16 }}>Ainda nÃ£o existem precificaÃ§Ãµes salvas.</div>
             ) : (
               <div className="table-wrap dashboard-table-wrap" style={{ marginTop: 16 }}>
                 <table>
@@ -241,7 +241,7 @@ export default function DashboardPage() {
                     <tr>
                       <th>Procedimento</th>
                       <th>Categoria</th>
-                      <th>Preço sugerido</th>
+                      <th>PreÃ§o sugerido</th>
                       <th>Atualizado em</th>
                       <th></th>
                     </tr>
