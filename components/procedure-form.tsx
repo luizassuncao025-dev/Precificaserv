@@ -1,9 +1,9 @@
-ï»¿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, RefreshCcw, Sparkles, Trash2 } from "lucide-react";
+import { ArrowRight, Plus, RefreshCcw, Sparkles, Trash2 } from "lucide-react";
 import { calculatePricing, currency, percent } from "@/lib/calculator";
 import {
   createProcedure,
@@ -66,7 +66,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
 
         setForm((current) => ({ ...current, items: applyLastPurchaseToItems(current.items, purchasesData) }));
       } catch (error) {
-        setMessage(error instanceof Error ? error.message : "NÃ£o foi possÃ­vel carregar dados iniciais.");
+        setMessage(error instanceof Error ? error.message : "Não foi possível carregar dados iniciais.");
       } finally {
         setLoading(false);
       }
@@ -88,6 +88,11 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
     [fixedCosts, clinicSettings, form],
   );
 
+  const selectedItems = useMemo(
+    () => form.items.filter((item) => item.name.trim().length > 0),
+    [form.items],
+  );
+
   const addMaterial = () => {
     setForm((current) => ({
       ...current,
@@ -100,7 +105,7 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
       ...current,
       items: applyLastPurchaseToItems(current.items, lastPurchases),
     }));
-    setMessage("Custos unitÃ¡rios atualizados com base em Ãšltimas Compras.");
+    setMessage("Custos unitários atualizados com base em Últimas Compras.");
   };
 
   const onSave = async () => {
@@ -108,14 +113,14 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
     setMessage("");
 
     if (!lastPurchases.length) {
-      setMessage("Cadastre insumos em Ãšltimas Compras antes de salvar a precificaÃ§Ã£o.");
+      setMessage("Cadastre insumos em Últimas Compras antes de salvar a precificação.");
       setSaving(false);
       return;
     }
 
     const hasInvalidItem = form.items.some((item) => !item.name || !findPurchaseByName(item.name, lastPurchases));
     if (hasInvalidItem) {
-      setMessage("Todos os insumos devem ser selecionados a partir da lista de Ãšltimas Compras.");
+      setMessage("Todos os insumos devem ser selecionados a partir da lista de Últimas Compras.");
       setSaving(false);
       return;
     }
@@ -132,15 +137,15 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
 
       if (mode === "edit" && procedureId) {
         await updateProcedure(userId, procedureId, payload);
-        setMessage("PrecificaÃ§Ã£o atualizada com sucesso.");
+        setMessage("Precificação atualizada com sucesso.");
         router.push(`/procedures/${procedureId}`);
       } else {
         const createdId = await createProcedure(userId, payload);
-        setMessage("PrecificaÃ§Ã£o salva com sucesso.");
+        setMessage("Precificação salva com sucesso.");
         router.push(`/procedures/${createdId}`);
       }
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Falha ao salvar precificaÃ§Ã£o.");
+      setMessage(error instanceof Error ? error.message : "Falha ao salvar precificação.");
     } finally {
       setSaving(false);
     }
@@ -152,43 +157,90 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
 
   return (
     <div className="grid" style={{ gap: 24 }}>
-      <div className="glass card hero-surface">
-        <div className="grid grid-2" style={{ alignItems: "end" }}>
-          <div>
-            <div className="badge"><Sparkles size={14} /> {mode === "edit" ? "Editar precificaÃ§Ã£o" : "Nova precificaÃ§Ã£o"}</div>
-            <h1 className="heading-lg">PrecificaÃ§Ã£o por procedimento com cÃ¡lculo automÃ¡tico</h1>
-            <p className="muted">Use os cadastros de Custos Fixos e Ãšltimas Compras para preencher automaticamente a maior parte do cÃ¡lculo.</p>
+      <section className="glass card procedure-hero-panel">
+        <div className="procedure-hero-grid">
+          <div className="procedure-copy">
+            <div className="badge"><Sparkles size={14} /> {mode === "edit" ? "Editar precificação" : "Nova precificação"}</div>
+            <h1 className="heading-lg procedure-title">Construa a precificação com clareza e deixe o sistema calcular o resto.</h1>
+            <p className="muted procedure-lead">
+              Preencha os dados essenciais do procedimento, selecione insumos a partir de Últimas Compras e acompanhe a formação do preço em tempo real.
+            </p>
+            <div className="procedure-actions-row">
+              <PdfButton data={form} pricing={pricing} userName={userName} />
+              <button type="button" className="btn btn-secondary" onClick={syncCostsWithLastPurchase}>
+                <RefreshCcw size={16} /> Aplicar Última Compra
+              </button>
+              <button type="button" className="btn btn-primary" onClick={onSave} disabled={saving}>
+                {saving ? "Salvando..." : mode === "edit" ? "Salvar alterações" : "Salvar precificação"}
+              </button>
+            </div>
+            <div className="procedure-shortcuts">
+              <Link href="/procedures/new" className="btn btn-secondary">Nova estrutura</Link>
+              <Link href="/fixed-costs" className="btn btn-secondary">Ir para Custos Fixos</Link>
+              <Link href="/last-purchases" className="btn btn-secondary">Ir para Últimas Compras</Link>
+            </div>
+            {message ? <div className="badge procedure-message">{message}</div> : null}
           </div>
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, flexWrap: "wrap" }}>
-            <PdfButton data={form} pricing={pricing} userName={userName} />
-            <button type="button" className="btn btn-secondary" onClick={syncCostsWithLastPurchase}>
-              <RefreshCcw size={16} /> Aplicar Ãšltima Compra
-            </button>
-            <button type="button" className="btn btn-primary" onClick={onSave} disabled={saving}>
-              {saving ? "Salvando..." : mode === "edit" ? "Salvar alteraÃ§Ãµes" : "Salvar precificaÃ§Ã£o"}
-            </button>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 16 }}>
-          <Link href="/procedures/new" className="btn btn-secondary">PrecificaÃ§Ã£o: Novo Procedimento</Link>
-          <Link href="/fixed-costs" className="btn btn-secondary">Ir para Custos Fixos</Link>
-          <Link href="/last-purchases" className="btn btn-secondary">Ir para Ãšltimas Compras</Link>
-        </div>
-        {message ? <div className="badge" style={{ marginTop: 16 }}>{message}</div> : null}
-      </div>
 
-      <section className="glass card">
-        <h2 className="heading-lg">1. Base de custos do negÃ³cio</h2>
-        <p className="muted">A base abaixo vem da aba Custos Fixos e alimenta automaticamente o valor da hora clÃ­nica.</p>
-        <div className="grid grid-3" style={{ marginTop: 20 }}>
-          <div className="stat"><div className="muted">Custos fixos</div><div className="kpi">{currency(pricing.totalFixedCosts)}</div></div>
-          <div className="stat"><div className="muted">Horas clÃ­nicas mensais</div><div className="kpi">{pricing.monthlyClinicalHours}</div></div>
-          <div className="stat"><div className="muted">Hora clÃ­nica</div><div className="kpi">{currency(pricing.costPerClinicalHour)}</div></div>
+          <aside className="procedure-summary-card">
+            <span className="landing-mini-label">Leitura da precificação</span>
+            <h2>{form.name || "Procedimento em construção"}</h2>
+            <p className="muted">{form.category || "Defina categoria, tempo clínico e insumos para consolidar o valor sugerido."}</p>
+
+            <div className="procedure-price-emphasis">
+              <span>Preço sugerido</span>
+              <strong>{currency(pricing.suggestedPrice)}</strong>
+            </div>
+
+            <div className="procedure-summary-metrics">
+              <div>
+                <span>Custo direto</span>
+                <strong>{currency(pricing.directCost)}</strong>
+              </div>
+              <div>
+                <span>Custo operacional</span>
+                <strong>{currency(pricing.operationalCost)}</strong>
+              </div>
+              <div>
+                <span>Impostos</span>
+                <strong>{currency(pricing.taxCost)}</strong>
+              </div>
+              <div>
+                <span>Margem</span>
+                <strong>{percent(form.profit_margin)}</strong>
+              </div>
+            </div>
+
+            <div className="procedure-summary-note">
+              <ArrowRight size={16} /> {selectedItems.length} insumo(s) selecionado(s) a partir de Últimas Compras.
+            </div>
+          </aside>
         </div>
       </section>
 
-      <section className="glass card">
-        <h2 className="heading-lg">2. Dados do procedimento</h2>
+      <section className="glass card procedure-step-card">
+        <div className="procedure-step-head">
+          <div>
+            <div className="badge">Etapa 1</div>
+            <h2 className="heading-lg" style={{ marginTop: 12 }}>Base de custos do negócio</h2>
+            <p className="muted">Esta base vem de Custos Fixos e sustenta automaticamente o valor da sua hora clínica.</p>
+          </div>
+        </div>
+        <div className="grid grid-3" style={{ marginTop: 20 }}>
+          <div className="stat procedure-stat-card"><div className="muted">Custos fixos</div><div className="kpi">{currency(pricing.totalFixedCosts)}</div></div>
+          <div className="stat procedure-stat-card"><div className="muted">Horas clínicas mensais</div><div className="kpi">{pricing.monthlyClinicalHours}</div></div>
+          <div className="stat procedure-stat-card"><div className="muted">Hora clínica</div><div className="kpi">{currency(pricing.costPerClinicalHour)}</div></div>
+        </div>
+      </section>
+
+      <section className="glass card procedure-step-card">
+        <div className="procedure-step-head">
+          <div>
+            <div className="badge">Etapa 2</div>
+            <h2 className="heading-lg" style={{ marginTop: 12 }}>Dados do procedimento</h2>
+            <p className="muted">Defina a estrutura principal do serviço para que o cálculo reflita a realidade da execução.</p>
+          </div>
+        </div>
         <div className="grid grid-2" style={{ marginTop: 16 }}>
           <div>
             <label className="label">Nome do procedimento</label>
@@ -199,11 +251,11 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
             <input className="input" value={form.category} onChange={(e) => setForm((current) => ({ ...current, category: e.target.value }))} />
           </div>
           <div>
-            <label className="label">Tempo clÃ­nico (horas)</label>
+            <label className="label">Tempo clínico (horas)</label>
             <input className="input" type="number" step="0.1" value={form.clinical_hours} onChange={(e) => setForm((current) => ({ ...current, clinical_hours: Number(e.target.value) }))} />
           </div>
           <div>
-            <label className="label">AlÃ­quota de imposto (%)</label>
+            <label className="label">Alíquota de imposto (%)</label>
             <input className="input" type="number" step="0.1" value={form.tax_rate} onChange={(e) => setForm((current) => ({ ...current, tax_rate: Number(e.target.value) }))} />
           </div>
           <div>
@@ -211,29 +263,30 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
             <input className="input" type="number" step="0.1" value={form.profit_margin} onChange={(e) => setForm((current) => ({ ...current, profit_margin: Number(e.target.value) }))} />
           </div>
           <div style={{ gridColumn: "1 / -1" }}>
-            <label className="label">ObservaÃ§Ãµes</label>
+            <label className="label">Observações</label>
             <textarea className="textarea" value={form.notes} onChange={(e) => setForm((current) => ({ ...current, notes: e.target.value }))} />
           </div>
         </div>
       </section>
 
-      <section className="glass card">
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+      <section className="glass card procedure-step-card">
+        <div className="procedure-step-head procedure-step-inline">
           <div>
-            <h2 className="heading-lg">3. Insumos do procedimento</h2>
-            <p className="muted">A seleÃ§Ã£o de insumos Ã© obrigatÃ³ria e deve usar exclusivamente os produtos cadastrados em Ãšltimas Compras.</p>
+            <div className="badge">Etapa 3</div>
+            <h2 className="heading-lg" style={{ marginTop: 12 }}>Insumos do procedimento</h2>
+            <p className="muted">Selecione apenas insumos cadastrados em Últimas Compras para manter o custo unitário consistente.</p>
           </div>
           <button type="button" className="btn btn-secondary" onClick={addMaterial}><Plus size={16} /> Adicionar item</button>
         </div>
 
-        <div className="table-wrap" style={{ marginTop: 16 }}>
+        <div className="procedure-table-wrap" style={{ marginTop: 16 }}>
           <table>
             <thead>
               <tr>
                 <th>Insumo</th>
                 <th>Unidade</th>
                 <th>Quantidade usada</th>
-                <th>Custo unitÃ¡rio</th>
+                <th>Custo unitário</th>
                 <th>Total</th>
                 <th></th>
               </tr>
@@ -298,15 +351,28 @@ export function ProcedureForm({ mode = "create", procedureId, initialData }: Pro
         </div>
       </section>
 
-      <section className="glass card">
-        <h2 className="heading-lg">4. FormaÃ§Ã£o do preÃ§o</h2>
-        <div className="grid grid-2" style={{ marginTop: 16 }}>
-          <div className="stat"><div className="muted">Custo direto</div><div className="kpi">{currency(pricing.directCost)}</div></div>
-          <div className="stat"><div className="muted">Custo operacional</div><div className="kpi">{currency(pricing.operationalCost)}</div></div>
-          <div className="stat"><div className="muted">Subtotal</div><div className="kpi">{currency(pricing.subtotalCost)}</div></div>
-          <div className="stat"><div className="muted">Impostos</div><div className="kpi">{currency(pricing.taxCost)}</div></div>
-          <div className="stat"><div className="muted">Margem desejada</div><div className="kpi">{percent(form.profit_margin)}</div></div>
-          <div className="stat"><div className="muted">PreÃ§o sugerido</div><div className="kpi">{currency(pricing.suggestedPrice)}</div></div>
+      <section className="glass card procedure-step-card procedure-result-card">
+        <div className="procedure-step-head">
+          <div>
+            <div className="badge">Etapa 4</div>
+            <h2 className="heading-lg" style={{ marginTop: 12 }}>Formação do preço</h2>
+            <p className="muted">Acompanhe abaixo a composição final do valor sugerido para validar se a estratégia está coerente.</p>
+          </div>
+        </div>
+        <div className="procedure-result-grid">
+          <div className="stat procedure-result-highlight">
+            <div className="muted">Preço sugerido</div>
+            <div className="kpi">{currency(pricing.suggestedPrice)}</div>
+            <p className="muted">Valor final considerando custo direto, operação, imposto e margem desejada.</p>
+          </div>
+          <div className="grid grid-2 procedure-result-metrics">
+            <div className="stat"><div className="muted">Custo direto</div><div className="kpi">{currency(pricing.directCost)}</div></div>
+            <div className="stat"><div className="muted">Custo operacional</div><div className="kpi">{currency(pricing.operationalCost)}</div></div>
+            <div className="stat"><div className="muted">Subtotal</div><div className="kpi">{currency(pricing.subtotalCost)}</div></div>
+            <div className="stat"><div className="muted">Impostos</div><div className="kpi">{currency(pricing.taxCost)}</div></div>
+            <div className="stat"><div className="muted">Margem desejada</div><div className="kpi">{percent(form.profit_margin)}</div></div>
+            <div className="stat"><div className="muted">Lucro bruto</div><div className="kpi">{currency(pricing.grossProfitValue)}</div></div>
+          </div>
         </div>
       </section>
     </div>
